@@ -18,19 +18,19 @@ export default function ExplorePage({ onBusinessClick }: Props) {
     : businesses.filter(b => b.category === selected)
 
   return (
-    <div className="pb-24 pt-5 px-4">
-      <h1 className="text-[22px] font-extrabold text-gray-900 mb-1 tracking-tight">Explore Venao</h1>
-      <p className="text-gray-500 text-sm mb-5">Everything the beach has to offer.</p>
+    <div className="pb-24 pt-5 px-4 bg-theme min-h-screen">
+      <h1 className="text-[22px] font-extrabold text-theme-primary mb-1 tracking-tight">Explore Venao</h1>
+      <p className="text-theme-muted text-sm mb-5">Everything the beach has to offer.</p>
 
       {/* ── Category filter — pill style ─────────────────────────────────── */}
       <div className="flex gap-2 overflow-x-auto pb-2 mb-5 -mx-4 px-4 scrollbar-hide">
         <button
           onClick={() => setSelected('all')}
-          className={`flex-shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all border ${
-            selected === 'all'
-              ? 'bg-[#1B4332] text-white border-[#1B4332]'
-              : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
-          }`}
+          className="flex-shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all"
+          style={selected === 'all'
+            ? { background: '#1B4332', color: 'white', border: '1px solid #1B4332' }
+            : { background: 'var(--surface)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }
+          }
         >
           All
         </button>
@@ -38,11 +38,11 @@ export default function ExplorePage({ onBusinessClick }: Props) {
           <button
             key={c.id}
             onClick={() => setSelected(c.id)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all border ${
-              selected === c.id
-                ? 'bg-[#1B4332] text-white border-[#1B4332]'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
-            }`}
+            className="flex-shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all"
+            style={selected === c.id
+              ? { background: '#1B4332', color: 'white', border: '1px solid #1B4332' }
+              : { background: 'var(--surface)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }
+            }
           >
             {c.label}
           </button>
@@ -59,7 +59,7 @@ export default function ExplorePage({ onBusinessClick }: Props) {
         {filtered.map(b => (
           <button
             key={b.id}
-            className="w-full bg-white rounded-2xl overflow-hidden shadow-sm text-left hover:shadow-md transition-all active:scale-[0.99]"
+            className="w-full card text-left hover:shadow-md transition-all active:scale-[0.99]"
             onClick={() => onBusinessClick(b.id)}
           >
             <div className="relative">

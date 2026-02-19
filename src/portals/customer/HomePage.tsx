@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { businesses, categories } from '../../data/mockData'
+import { isOpen, distanceKm, formatDistance } from '../../utils/businessUtils'
+import { useUserLocation } from '../../hooks/useUserLocation'
 
 interface Props {
   onBusinessClick: (id: string) => void
@@ -13,13 +15,14 @@ function DeliveryTime({ time }: { time: string }) {
 
 export default function HomePage({ onBusinessClick }: Props) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const userPos = useUserLocation()
 
   const filtered = activeCategory
     ? businesses.filter(b => b.category === activeCategory)
     : businesses
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 bg-theme min-h-screen">
       {/* ── Header ────────────────────────────────────────────────────────── */}
       <div className="bg-[#1B4332] px-4 pt-10 pb-5">
         <div className="flex items-center gap-1.5 text-white/60 text-xs mb-2 font-medium tracking-wide uppercase">
@@ -102,39 +105,44 @@ export default function HomePage({ onBusinessClick }: Props) {
           <>
             <h3 className="text-gray-900 font-bold text-base mb-3 tracking-tight">Popular near you</h3>
             <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 mb-6 scrollbar-hide">
-              {businesses.slice(0, 5).map(biz => (
-                <button
-                  key={biz.id}
-                  className="flex-shrink-0 w-56 bg-white rounded-2xl overflow-hidden shadow-sm text-left hover:shadow-md transition-all active:scale-95"
-                  onClick={() => onBusinessClick(biz.id)}
-                >
-                  <div className="relative">
-                    <img src={biz.image} alt={biz.name} className="w-full h-32 object-cover" />
-                    <span className="absolute top-2 left-2 bg-[#1B4332] text-white text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wide uppercase">Open</span>
-                  </div>
-                  <div className="p-3">
-                    <h4 className="font-bold text-gray-900 text-sm mb-0.5 truncate">{biz.name}</h4>
-                    <p className="text-[11px] text-gray-500 mb-2 line-clamp-1">{biz.description}</p>
-                    <div className="flex items-center gap-1.5 text-[11px] text-gray-500">
-                      <span className="text-amber-500 font-semibold">{biz.rating}</span>
-                      <span className="text-gray-300">·</span>
-                      <DeliveryTime time={biz.deliveryTime} />
-                      {biz.deliveryFee > 0 && (
-                        <>
-                          <span className="text-gray-300">·</span>
-                          <span>${biz.deliveryFee} del.</span>
-                        </>
-                      )}
-                      {biz.deliveryFee === 0 && (
-                        <>
-                          <span className="text-gray-300">·</span>
-                          <span className="text-[#1B4332] font-semibold">Free del.</span>
-                        </>
-                      )}
+              {businesses.slice(0, 5).map(biz => {
+                const open = isOpen(biz.hours)
+                return (
+                  <button
+                    key={biz.id}
+                    className="flex-shrink-0 w-56 card text-left hover:shadow-md transition-all active:scale-95"
+                    onClick={() => onBusinessClick(biz.id)}
+                  >
+                    <div className="relative">
+                      <img src={biz.image} alt={biz.name} className="w-full h-32 object-cover" />
+                      <span className={`absolute top-2 left-2 text-white text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wide uppercase ${open ? 'bg-[#1B4332]' : 'bg-gray-500'}`}>
+                        {open ? 'Open' : 'Closed'}
+                      </span>
                     </div>
-                  </div>
-                </button>
-              ))}
+                    <div className="p-3">
+                      <h4 className="font-bold text-gray-900 text-sm mb-0.5 truncate">{biz.name}</h4>
+                      <p className="text-[11px] text-gray-500 mb-2 line-clamp-1">{biz.description}</p>
+                      <div className="flex items-center gap-1.5 text-[11px] text-gray-500">
+                        <span className="text-amber-500 font-semibold">{biz.rating}</span>
+                        <span className="text-gray-300">·</span>
+                        <DeliveryTime time={biz.deliveryTime} />
+                        {biz.deliveryFee > 0 && (
+                          <>
+                            <span className="text-gray-300">·</span>
+                            <span>${biz.deliveryFee} del.</span>
+                          </>
+                        )}
+                        {biz.deliveryFee === 0 && (
+                          <>
+                            <span className="text-gray-300">·</span>
+                            <span className="text-[#1B4332] font-semibold">Free del.</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
             </div>
           </>
         )}
@@ -157,47 +165,57 @@ export default function HomePage({ onBusinessClick }: Props) {
         </div>
 
         <div className="space-y-3">
-          {filtered.map(biz => (
-            <button
-              key={biz.id}
-              className="w-full bg-white rounded-2xl overflow-hidden shadow-sm text-left hover:shadow-md transition-all active:scale-[0.99]"
-              onClick={() => onBusinessClick(biz.id)}
-            >
-              <div className="relative">
-                <img src={biz.image} alt={biz.name} className="w-full h-40 object-cover" />
-                <span className="absolute top-2 left-2 bg-[#1B4332] text-white text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wide uppercase">Open</span>
-                {biz.deliveryFee === 0 && (
-                  <span className="absolute top-2 right-2 bg-white/90 text-[#1B4332] text-[9px] font-bold px-2 py-0.5 rounded-full">Free delivery</span>
-                )}
-              </div>
-              <div className="px-4 py-3">
-                <div className="flex items-start justify-between mb-0.5">
-                  <h4 className="font-bold text-gray-900 text-[15px]">{biz.name}</h4>
-                  <span className="text-amber-500 font-semibold text-[13px] ml-2 flex-shrink-0">{biz.rating} ★</span>
-                </div>
-                <p className="text-[12px] text-gray-500 mb-2 line-clamp-2 leading-relaxed">{biz.description}</p>
-                <div className="flex gap-1.5 flex-wrap mb-2">
-                  {biz.tags.map(t => (
-                    <span key={t} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md font-medium">{t}</span>
-                  ))}
-                </div>
-                <div className="flex items-center gap-3 text-[12px] text-gray-500 border-t border-gray-50 pt-2">
-                  <span><DeliveryTime time={biz.deliveryTime} /></span>
-                  <span className="text-gray-200">·</span>
-                  {biz.deliveryFee > 0
-                    ? <span>${biz.deliveryFee} delivery</span>
-                    : <span className="text-[#1B4332] font-medium">Free delivery</span>
-                  }
-                  {biz.minOrder > 0 && (
-                    <>
-                      <span className="text-gray-200">·</span>
-                      <span>${biz.minOrder} min</span>
-                    </>
+          {filtered.map(biz => {
+            const open = isOpen(biz.hours)
+            return (
+              <button
+                key={biz.id}
+                className="w-full card text-left hover:shadow-md transition-all active:scale-[0.99]"
+                onClick={() => onBusinessClick(biz.id)}
+              >
+                <div className="relative">
+                  <img src={biz.image} alt={biz.name} className="w-full h-40 object-cover" />
+                  <span className={`absolute top-2 left-2 text-white text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wide uppercase ${open ? 'bg-[#1B4332]' : 'bg-gray-500'}`}>
+                    {open ? 'Open' : 'Closed'}
+                  </span>
+                  {biz.deliveryFee === 0 && (
+                    <span className="absolute top-2 right-2 bg-white/90 text-[#1B4332] text-[9px] font-bold px-2 py-0.5 rounded-full">Free delivery</span>
                   )}
                 </div>
-              </div>
-            </button>
-          ))}
+                <div className="px-4 py-3">
+                  <div className="flex items-start justify-between mb-0.5">
+                    <h4 className="font-bold text-gray-900 text-[15px]">{biz.name}</h4>
+                    <span className="text-amber-500 font-semibold text-[13px] ml-2 flex-shrink-0">{biz.rating} ★</span>
+                  </div>
+                  <p className="text-[12px] text-gray-500 mb-2 line-clamp-2 leading-relaxed">{biz.description}</p>
+                  <div className="flex gap-1.5 flex-wrap mb-2">
+                    {biz.tags.map(t => (
+                      <span key={t} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md font-medium">{t}</span>
+                    ))}
+                  </div>
+                  {userPos && (
+                    <span className="text-[11px] text-gray-400">
+                      {formatDistance(distanceKm(userPos.lat, userPos.lng, biz.coordinates.lat, biz.coordinates.lng))} away
+                    </span>
+                  )}
+                  <div className="flex items-center gap-3 text-[12px] text-gray-500 border-t border-gray-50 pt-2 mt-2">
+                    <span><DeliveryTime time={biz.deliveryTime} /></span>
+                    <span className="text-gray-200">·</span>
+                    {biz.deliveryFee > 0
+                      ? <span>${biz.deliveryFee} delivery</span>
+                      : <span className="text-[#1B4332] font-medium">Free delivery</span>
+                    }
+                    {biz.minOrder > 0 && (
+                      <>
+                        <span className="text-gray-200">·</span>
+                        <span>${biz.minOrder} min</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </button>
+            )
+          })}
         </div>
 
         {filtered.length === 0 && (

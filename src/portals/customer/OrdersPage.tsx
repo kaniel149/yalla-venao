@@ -12,32 +12,30 @@ function CheckIcon() {
 
 export default function OrdersPage({ onTrack }: Props) {
   return (
-    <div className="pb-24 pt-5 px-4">
-      <h1 className="text-[22px] font-extrabold text-gray-900 mb-1 tracking-tight">Orders</h1>
-      <p className="text-gray-500 text-sm mb-5">Your delivery history.</p>
+    <div className="pb-24 pt-5 px-4 bg-theme min-h-screen">
+      <h1 className="text-[22px] font-extrabold text-theme-primary mb-1 tracking-tight">Orders</h1>
+      <p className="text-theme-muted text-sm mb-5">Your delivery history.</p>
 
       {/* ── Active Order ─────────────────────────────────────────────────── */}
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm mb-4 border-l-4 border-[#FF6B35]">
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="font-bold text-gray-900">La Lora</span>
-            <span className="text-[11px] bg-orange-50 text-[#FF6B35] font-bold px-3 py-1 rounded-full">
-              On the way
-            </span>
-          </div>
-          <p className="text-[13px] text-gray-500 mb-1">Ceviche de Corvina × 2, Fish Tacos × 1</p>
-          <p className="font-bold text-[#FF6B35] text-[15px] mb-3">$35.00</p>
-          <button
-            onClick={onTrack}
-            className="w-full bg-[#FF6B35] text-white font-bold py-3 rounded-xl text-[13px] hover:bg-[#E85520] active:scale-95 transition-all"
-          >
-            Track order · ~8 min
-          </button>
+      <div className="card p-4 mb-4" style={{ borderLeft: '4px solid #FF6B35' }}>
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="font-bold text-theme-primary">La Lora</span>
+          <span className="text-[11px] font-bold px-3 py-1 rounded-full" style={{ background: 'rgba(255,107,53,0.12)', color: '#FF6B35' }}>
+            On the way
+          </span>
         </div>
+        <p className="text-sm text-theme-muted mb-1">Ceviche de Corvina × 2, Fish Tacos × 1</p>
+        <p className="font-bold text-[#FF6B35] text-[15px] mb-3">$35.00</p>
+        <button
+          onClick={onTrack}
+          className="w-full bg-[#FF6B35] text-white font-bold py-3 rounded-xl text-[13px] hover:bg-[#E85520] active:scale-95 transition-all"
+        >
+          Track order · ~8 min
+        </button>
       </div>
 
       {/* ── Past Orders ──────────────────────────────────────────────────── */}
-      <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wide mb-3">Past orders</h2>
+      <h2 className="text-[13px] font-semibold text-theme-muted uppercase tracking-wide mb-3">Past orders</h2>
 
       {[
         {
@@ -59,18 +57,18 @@ export default function OrdersPage({ onTrack }: Props) {
           date: 'Feb 16',
         },
       ].map((order, i) => (
-        <div key={i} className="bg-white rounded-2xl shadow-sm p-4 mb-3">
+        <div key={i} className="card p-4 mb-3">
           <div className="flex items-center justify-between mb-1">
-            <span className="font-bold text-gray-900 text-[14px]">{order.business}</span>
-            <span className="text-[11px] bg-green-50 text-green-700 font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+            <span className="font-bold text-theme-primary text-[14px]">{order.business}</span>
+            <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1" style={{ background: 'rgba(27,67,50,0.12)', color: '#1B4332' }}>
               <CheckIcon /> Delivered
             </span>
           </div>
-          <p className="text-[12px] text-gray-500 mb-2">{order.items}</p>
+          <p className="text-sm text-theme-muted mb-2">{order.items}</p>
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-bold text-gray-800 text-[14px]">{order.total}</span>
-              <span className="text-gray-400 text-[11px] ml-2">{order.date}</span>
+              <span className="font-bold text-theme-primary text-[14px]">{order.total}</span>
+              <span className="text-theme-muted text-[11px] ml-2">{order.date}</span>
             </div>
             <button className="text-[12px] text-[#FF6B35] font-semibold hover:underline">
               Reorder

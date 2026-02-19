@@ -4,14 +4,67 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Day / Night Theme Variables ─────────────────────────────────────────── */
+:root,
+[data-theme="day"] {
+  --bg: #F5F3EE;
+  --surface: #ffffff;
+  --surface-2: #F0EEE9;
+  --primary: #FF6B35;
+  --primary-dark: #E85520;
+  --accent: #1B4332;
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border: #E5E7EB;
+  --nav-bg: rgba(255,255,255,0.92);
+  --nav-border: rgba(229,231,235,0.8);
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[data-theme="night"] {
+  --bg: #0F1117;
+  --surface: #1A1D27;
+  --surface-2: #22263A;
+  --primary: #FF6B35;
+  --primary-dark: #E85520;
+  --accent: #27AE60;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-muted: #6B7280;
+  --border: #2D3148;
+  --nav-bg: rgba(26,29,39,0.92);
+  --nav-border: rgba(45,49,72,0.8);
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
 * { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
-body { background: #F5F3EE; }
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  transition: background 0.4s ease, color 0.4s ease;
+}
 
 h1, h2, .serif { font-family: 'DM Serif Display', Georgia, serif; }
 
-.card { @apply bg-white rounded-2xl shadow-sm overflow-hidden; }
+.card {
+  @apply rounded-2xl overflow-hidden;
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+}
+
 .btn-primary { @apply bg-[#FF6B35] text-white font-semibold py-3 px-6 rounded-full transition-all duration-200 hover:bg-[#E85520] active:scale-95; }
-.btn-secondary { @apply bg-[#1B4332] text-white font-semibold py-3 px-6 rounded-full transition-all; }
+.btn-secondary { background: var(--accent); @apply text-white font-semibold py-3 px-6 rounded-full transition-all; }
+
+/* ─── Theme-aware utilities ────────────────────────────────────────────────── */
+.bg-theme { background: var(--bg); }
+.bg-surface { background: var(--surface); }
+.bg-surface-2 { background: var(--surface-2); }
+.text-theme-primary { color: var(--text-primary); }
+.text-theme-secondary { color: var(--text-secondary); }
+.text-theme-muted { color: var(--text-muted); }
+.border-theme { border-color: var(--border); }
 
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
@@ -21,3 +74,77 @@ h1, h2, .serif { font-family: 'DM Serif Display', Georgia, serif; }
 
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Night Mode Global Overrides ─────────────────────────────────────────── */
+/* These target hardcoded Tailwind classes inside the customer portal */
+[data-theme="night"] .bg-white {
+  background: var(--surface) !important;
+}
+[data-theme="night"] .bg-gray-100 {
+  background: var(--surface-2) !important;
+}
+[data-theme="night"] .bg-gray-50 {
+  background: var(--surface-2) !important;
+}
+[data-theme="night"] .text-gray-900 {
+  color: var(--text-primary) !important;
+}
+[data-theme="night"] .text-gray-800 {
+  color: var(--text-primary) !important;
+}
+[data-theme="night"] .text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+[data-theme="night"] .text-gray-600 {
+  color: var(--text-secondary) !important;
+}
+[data-theme="night"] .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+[data-theme="night"] .text-gray-400 {
+  color: var(--text-muted) !important;
+}
+[data-theme="night"] .border-gray-100 {
+  border-color: var(--border) !important;
+}
+[data-theme="night"] .border-gray-200 {
+  border-color: var(--border) !important;
+}
+[data-theme="night"] .border-gray-50 {
+  border-color: var(--border) !important;
+}
+[data-theme="night"] .divide-gray-50 > * + * {
+  border-color: var(--border) !important;
+}
+[data-theme="night"] input {
+  background: var(--surface-2) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="night"] input::placeholder {
+  color: var(--text-muted) !important;
+}
+/* Search input override in header */
+[data-theme="night"] .bg-\[\#F5F3EE\] {
+  background: var(--bg) !important;
+}
+/* Tags & badges */
+[data-theme="night"] .bg-gray-100.text-gray-600 {
+  background: var(--surface-2) !important;
+  color: var(--text-muted) !important;
+}
+[data-theme="night"] .hover\:bg-gray-50:hover {
+  background: var(--surface-2) !important;
+}
+[data-theme="night"] .hover\:bg-gray-200:hover {
+  background: var(--border) !important;
+}
+
+/* ─── Floating pill nav ────────────────────────────────────────────────────── */
+.pill-nav {
+  background: var(--nav-bg);
+  border: 1px solid var(--nav-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: background 0.4s ease, border-color 0.4s ease;
+}

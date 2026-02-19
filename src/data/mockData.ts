@@ -19,6 +19,9 @@ export interface Business {
   tags: string[]
   description: string
   products: Product[]
+  phone: string
+  hours: { open: number; close: number }
+  coordinates: { lat: number; lng: number }
 }
 
 export interface CartItem {
@@ -52,6 +55,9 @@ export const businesses: Business[] = [
     minOrder: 8,
     tags: ['Panamanian', 'Seafood', 'Local Fav'],
     description: 'Traditional Panamanian dishes with a modern twist. Fresh seafood, vibrant atmosphere, community feel. The real deal in Venao.',
+    phone: '50766123401',
+    hours: { open: 11, close: 22 },
+    coordinates: { lat: 7.4210, lng: -80.1501 },
     products: [
       { id: 'lq1', name: 'Ceviche de Corvina', price: 12, image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=400&q=80', description: 'Fresh corvina in limón mandarina, ají chombo, cilantro, red onion. With patacones.' },
       { id: 'lq2', name: 'Grilled Pargo', price: 18, image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&q=80', description: 'Whole red snapper, grilled over wood, served with arroz con coco and patacones.' },
@@ -72,6 +78,9 @@ export const businesses: Business[] = [
     minOrder: 10,
     tags: ['Mediterranean', 'Asian Fusion', 'Vegetarian'],
     description: 'The surprise of Venao. Mediterranean-Asian fusion — hummus, pad Thai, kebabs, fresh local ingredients. Best coffee on the peninsula.',
+    phone: '50766234512',
+    hours: { open: 7, close: 21 },
+    coordinates: { lat: 7.4213, lng: -80.1499 },
     products: [
       { id: 'col1', name: 'Hummus Plate', price: 9, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: 'House hummus, roasted garlic, olive oil, fresh pita. Simple and perfect.' },
       { id: 'col2', name: 'Pad Thai', price: 13, image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80', description: 'Wok rice noodles, tofu or shrimp, tamarind, peanuts, lime. Vegetarian available.' },
@@ -92,6 +101,9 @@ export const businesses: Business[] = [
     minOrder: 8,
     tags: ['Seafood', 'Beach Bar', 'Surfer Spot'],
     description: 'Right on the sand at El Sitio Hotel. Ceviche, grilled fish, cold beer. The original post-surf spot. Laid back, no pretense.',
+    phone: '50766345623',
+    hours: { open: 10, close: 23 },
+    coordinates: { lat: 7.4208, lng: -80.1510 },
     products: [
       { id: 'es1', name: 'Ceviche Mixto', price: 10, image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=400&q=80', description: 'Shrimp, octopus, corvina. With tostadas and hot sauce.' },
       { id: 'es2', name: 'Grilled Fish of the Day', price: 16, image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&q=80', description: 'Whatever they caught this morning. Ask your courier.' },
@@ -111,6 +123,9 @@ export const businesses: Business[] = [
     minOrder: 10,
     tags: ['Middle Eastern', 'Vegan', 'Board Games'],
     description: 'Hummus, falafel, and Middle Eastern bowls in a chill spot with board games. Surprisingly great for Panama. Vegan and meat options.',
+    phone: '50766456734',
+    hours: { open: 12, close: 21 },
+    coordinates: { lat: 7.4217, lng: -80.1505 },
     products: [
       { id: 'hum1', name: 'Classic Hummus Bowl', price: 11, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: "Creamy hummus, olive oil, za'atar, pickled vegetables, pita." },
       { id: 'hum2', name: 'Falafel Wrap', price: 10, image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf04?w=400&q=80', description: 'Crispy falafel, tahini, greens, pickled cabbage. 100% vegan.' },
@@ -130,6 +145,9 @@ export const businesses: Business[] = [
     minOrder: 12,
     tags: ['Pizza', 'Italian', 'Beachfront'],
     description: 'Wood-fired pizza with a beachfront view. The most consistent pizza in Venao — good by any standard, great by Panama\'s.',
+    phone: '50766567845',
+    hours: { open: 17, close: 22 },
+    coordinates: { lat: 7.4219, lng: -80.1498 },
     products: [
       { id: 'pg1', name: 'Margherita', price: 14, image: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=400&q=80', description: 'San Marzano tomato, fior di latte, basil. The benchmark.' },
       { id: 'pg2', name: 'Venao Special', price: 18, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80', description: "Shrimp, jalapeño, garlic oil, mozzarella, cilantro. Surfer's pizza." },
@@ -151,6 +169,9 @@ export const businesses: Business[] = [
     minOrder: 5,
     tags: ['Beach Bar', 'Cocktails', 'Sunset Views'],
     description: 'Beachfront bar with the best sunset view in Venao. Creative cocktails, cold beer, and a playlist that fits the vibe.',
+    phone: '50766678956',
+    hours: { open: 14, close: 0 },
+    coordinates: { lat: 7.4206, lng: -80.1512 },
     products: [
       { id: 'wao1', name: 'Venao Sunset', price: 9, image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&q=80', description: 'Dark rum, passion fruit, ginger beer, lime. Order two.' },
       { id: 'wao2', name: 'Coconut Mojito', price: 8, image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80', description: 'White rum, coconut water, fresh mint, lime. Beach standard.' },
@@ -173,6 +194,9 @@ export const businesses: Business[] = [
     minOrder: 5,
     tags: ['Grocery', 'Essentials', 'Local'],
     description: 'The town store. Beer, water, snacks, sunscreen, fresh fruit. Everything you need, nothing you don\'t.',
+    phone: '50766789067',
+    hours: { open: 7, close: 21 },
+    coordinates: { lat: 7.4215, lng: -80.1503 },
     products: [
       { id: 'ms1', name: 'Tropical Fruit Box', price: 8, image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=400&q=80', description: 'Papaya, mango, pineapple, watermelon. Seasonal and fresh-cut.' },
       { id: 'ms2', name: 'Balboa 12-pack', price: 14, image: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80', description: 'Cold and ready.' },
@@ -195,6 +219,9 @@ export const businesses: Business[] = [
     minOrder: 40,
     tags: ['Massage', 'Yoga', 'Beach Delivery'],
     description: 'Sports massage, Swedish relaxation, yoga sessions. Beach or bungalow delivery. Book in advance for sunset slots.',
+    phone: '50766890178',
+    hours: { open: 8, close: 20 },
+    coordinates: { lat: 7.4222, lng: -80.1507 },
     products: [
       { id: 'vw1', name: 'Swedish (60 min)', price: 55, image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&q=80', description: 'Full body Swedish massage. Beach or bungalow, your choice.' },
       { id: 'vw2', name: 'Sports Recovery (45 min)', price: 45, image: 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=400&q=80', description: 'Deep tissue — back, legs, shoulders. For surfers.' },
@@ -216,6 +243,9 @@ export const businesses: Business[] = [
     minOrder: 20,
     tags: ['Surf Lessons', 'Board Rental', 'All Levels'],
     description: 'The original Venao surf school. Board rental, group lessons, private coaching. All levels welcome.',
+    phone: '50766901289',
+    hours: { open: 6, close: 18 },
+    coordinates: { lat: 7.4207, lng: -80.1511 },
     products: [
       { id: 'surf1', name: 'Board Rental (half day)', price: 20, image: 'https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=400&q=80', description: 'Foam or fiberglass, your size. Includes leash and wax.' },
       { id: 'surf2', name: 'Group Lesson (2 hrs)', price: 35, image: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=400&q=80', description: 'Max 6 students. Theory + water time. Foam board included.' },

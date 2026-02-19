@@ -38,7 +38,7 @@ const Icons = {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.6"/>
       <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="12" y1="17" x2="12.01" y2="17" stroke="2" strokeLinecap="round"/>
     </svg>
   ),
   logout: (
@@ -67,10 +67,10 @@ const menuItems = [
 
 export default function ProfilePage() {
   return (
-    <div className="pb-24 pt-5 px-4">
+    <div className="pb-24 pt-5 px-4 bg-theme min-h-screen">
 
       {/* ── Profile header ─────────────────────────────────────────────── */}
-      <div className="relative bg-white rounded-2xl overflow-hidden shadow-sm mb-4">
+      <div className="card mb-4">
         {/* Cover photo */}
         <div className="h-24 relative">
           <img
@@ -86,11 +86,11 @@ export default function ProfilePage() {
           <div className="w-16 h-16 rounded-full bg-[#1B4332] border-4 border-white flex items-center justify-center shadow-md mb-2">
             <span className="text-white font-bold text-xl">S</span>
           </div>
-          <h1 className="text-[18px] font-extrabold text-gray-900 leading-tight">Surf Traveler</h1>
-          <p className="text-sm text-gray-500 mb-3">surfer@venao.com</p>
+          <h1 className="text-[18px] font-extrabold text-theme-primary leading-tight">Surf Traveler</h1>
+          <p className="text-sm text-theme-muted mb-3">surfer@venao.com</p>
           <div className="flex gap-2">
-            <span className="text-[11px] bg-[#FF6B35]/10 text-[#FF6B35] font-semibold px-3 py-1 rounded-full">3 orders</span>
-            <span className="text-[11px] bg-[#1B4332]/10 text-[#1B4332] font-semibold px-3 py-1 rounded-full">5.0 ★ rating</span>
+            <span className="text-[11px] font-semibold px-3 py-1 rounded-full" style={{ background: 'rgba(255,107,53,0.12)', color: '#FF6B35' }}>3 orders</span>
+            <span className="text-[11px] font-semibold px-3 py-1 rounded-full" style={{ background: 'rgba(27,67,50,0.12)', color: '#1B4332' }}>5.0 ★ rating</span>
           </div>
         </div>
       </div>
@@ -115,29 +115,32 @@ export default function ProfilePage() {
       </div>
 
       {/* ── Menu ───────────────────────────────────────────────────────── */}
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm divide-y divide-gray-50">
+      <div className="card overflow-hidden">
         {menuItems.map((item, i) => (
           <button
             key={i}
-            className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all text-left group"
+            className="w-full flex items-center gap-3 px-4 py-3.5 transition-all text-left group"
+            style={{ borderTop: i > 0 ? '1px solid var(--border)' : 'none' }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-2)')}
+            onMouseLeave={e => (e.currentTarget.style.background = '')}
           >
-            <span className={`flex-shrink-0 ${item.danger ? 'text-red-400' : 'text-gray-400 group-hover:text-[#1B4332] transition-colors'}`}>
+            <span className={`flex-shrink-0 ${item.danger ? 'text-red-400' : 'text-theme-muted'}`}>
               {item.icon}
             </span>
             <div className="flex-1 min-w-0">
-              <p className={`text-sm font-semibold ${item.danger ? 'text-red-500' : 'text-gray-800'}`}>
+              <p className={`text-sm font-semibold ${item.danger ? 'text-red-500' : 'text-theme-primary'}`}>
                 {item.label}
               </p>
               {item.desc && (
-                <p className="text-xs text-gray-400 mt-0.5">{item.desc}</p>
+                <p className="text-xs text-theme-muted mt-0.5">{item.desc}</p>
               )}
             </div>
-            <span className="text-gray-300 group-hover:text-gray-400 transition-colors">{Icons.chevron}</span>
+            <span className="text-theme-muted">{Icons.chevron}</span>
           </button>
         ))}
       </div>
 
-      <p className="text-center text-[11px] text-gray-400 mt-6 tracking-wide">
+      <p className="text-center text-[11px] text-theme-muted mt-6 tracking-wide">
         Yalla Venao · Made in Playa Venao 🇵🇦
       </p>
     </div>
