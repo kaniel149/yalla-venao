@@ -27,50 +27,13 @@ export interface CartItem {
   businessId: string
 }
 
-// Categories with real photography
 export const categories = [
-  {
-    id: 'food',
-    label: 'Food',
-    emoji: '🍽️',
-    color: '#FF6B35',
-    image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=600&q=80', // ceviche
-  },
-  {
-    id: 'drinks',
-    label: 'Drinks',
-    emoji: '🍹',
-    color: '#E67E22',
-    image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80', // tropical bar
-  },
-  {
-    id: 'grocery',
-    label: 'Grocery',
-    emoji: '🛒',
-    color: '#1B4332',
-    image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=600&q=80', // tropical fruit market
-  },
-  {
-    id: 'massage',
-    label: 'Wellness',
-    emoji: '💆',
-    color: '#9B59B6',
-    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80', // massage
-  },
-  {
-    id: 'hotel',
-    label: 'Stay',
-    emoji: '🏡',
-    color: '#3498DB',
-    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80', // beach bungalow
-  },
-  {
-    id: 'surf',
-    label: 'Surf',
-    emoji: '🏄',
-    color: '#27AE60',
-    image: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=600&q=80', // surfing action
-  },
+  { id: 'food',    label: 'Food',    emoji: '🍽️', color: '#FF6B35', image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=600&q=80' },
+  { id: 'drinks',  label: 'Drinks',  emoji: '🍹', color: '#E67E22', image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80' },
+  { id: 'grocery', label: 'Grocery', emoji: '🛒', color: '#1B4332', image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=600&q=80' },
+  { id: 'massage', label: 'Wellness',emoji: '💆', color: '#9B59B6', image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80' },
+  { id: 'hotel',   label: 'Stay',    emoji: '🏡', color: '#3498DB', image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80' },
+  { id: 'surf',    label: 'Surf',    emoji: '🏄', color: '#27AE60', image: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=600&q=80' },
 ]
 
 export const businesses: Business[] = [
@@ -79,445 +42,198 @@ export const businesses: Business[] = [
 
   {
     id: '1',
-    name: 'La Lora',
+    name: 'La Quincha',
     category: 'food',
-    // Rustic beach palapa restaurant, ocean backdrop
     image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80',
-    rating: 4.9,
-    reviews: 347,
-    deliveryTime: '20–35',
+    rating: 5.0,
+    reviews: 21,
+    deliveryTime: '25–35',
     deliveryFee: 2,
     minOrder: 8,
-    tags: ['Beach Bar', 'Seafood', 'Panamanian'],
-    description: 'The original Venao hangout. Palapa roof, sand floors, cold Balboa, and the best ceviche on the peninsula. Cash only, no regrets.',
+    tags: ['Panamanian', 'Seafood', 'Local Fav'],
+    description: 'Traditional Panamanian dishes with a modern twist. Fresh seafood, vibrant atmosphere, community feel. The real deal in Venao.',
     products: [
-      {
-        id: 'll1',
-        name: 'Ceviche de Corvina',
-        price: 12,
-        image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=600&q=80',
-        description: 'Fresh corvina marinated in limón mandarina, ají chombo, cilantro, red onion. Comes with patacones.',
-      },
-      {
-        id: 'll2',
-        name: 'Fish Tacos × 3',
-        price: 11,
-        image: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=600&q=80',
-        description: 'Grilled mahi-mahi, cabbage curtido, chipotle crema, pickled jalapeño. Corn tortillas.',
-      },
-      {
-        id: 'll3',
-        name: 'Patacones con Pollo',
-        price: 9,
-        image: 'https://images.unsplash.com/photo-1544025162-d76538891a96?w=600&q=80',
-        description: 'Double-fried green plantains topped with shredded chicken, avocado, pico de gallo, crema.',
-      },
-      {
-        id: 'll4',
-        name: 'Arroz con Pollo',
-        price: 10,
-        image: 'https://images.unsplash.com/photo-1624300629298-e9de39c13be5?w=600&q=80',
-        description: 'Slow-simmered chicken with yellow rice, veggies, and ensalada. The real Panama comfort plate.',
-      },
-    ],
+      { id: 'lq1', name: 'Ceviche de Corvina', price: 12, image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=400&q=80', description: 'Fresh corvina in limón mandarina, ají chombo, cilantro, red onion. With patacones.' },
+      { id: 'lq2', name: 'Grilled Pargo', price: 18, image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&q=80', description: 'Whole red snapper, grilled over wood, served with arroz con coco and patacones.' },
+      { id: 'lq3', name: 'Ropa Vieja', price: 14, image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&q=80', description: 'Slow-braised shredded beef, sofrito, peppers. Classic Panama comfort food.' },
+      { id: 'lq4', name: 'Sancocho', price: 11, image: 'https://images.unsplash.com/photo-1604152135912-04a022e23696?w=400&q=80', description: "Panama's national soup. Chicken, yuca, culantro, corn. The hangover cure that actually works." },
+    ]
   },
 
   {
     id: '2',
-    name: 'Donde Viejo',
+    name: 'Coleos Cafe',
     category: 'food',
-    // Rustic local food, traditional Panama plates
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80',
-    rating: 4.8,
-    reviews: 214,
-    deliveryTime: '25–40',
+    image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80',
+    rating: 4.7,
+    reviews: 133,
+    deliveryTime: '20–30',
     deliveryFee: 2,
-    minOrder: 7,
-    tags: ['Local', 'Panamanian', 'Homestyle'],
-    description: 'No menu, no Wi-Fi, no fuss. Viejo cooks what the day brings — sancocho, ropa vieja, carimañolas. Come hungry, leave full, pay $10.',
+    minOrder: 10,
+    tags: ['Mediterranean', 'Asian Fusion', 'Vegetarian'],
+    description: 'The surprise of Venao. Mediterranean-Asian fusion — hummus, pad Thai, kebabs, fresh local ingredients. Best coffee on the peninsula.',
     products: [
-      {
-        id: 'dv1',
-        name: 'Sancocho de Gallina',
-        price: 9,
-        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&q=80',
-        description: 'Free-range hen simmered for hours with yuca, ñame, culantro. Panama\'s Sunday remedy. Cures everything.',
-      },
-      {
-        id: 'dv2',
-        name: 'Ropa Vieja',
-        price: 11,
-        image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80',
-        description: 'Shredded beef braised in sofrito, tomatoes, peppers. Served with white rice, tajadas, and salad.',
-      },
-      {
-        id: 'dv3',
-        name: 'Carimañolas × 2',
-        price: 5,
-        image: 'https://images.unsplash.com/photo-1506280754576-f6fa8a873550?w=600&q=80',
-        description: 'Hand-shaped yuca fritters, stuffed with seasoned ground beef, deep-fried to gold. Classic Panamanian street bite.',
-      },
-      {
-        id: 'dv4',
-        name: 'Bistec Picado',
-        price: 12,
-        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80',
-        description: 'Sautéed beef with onions, peppers, tomato. Served with rice, lentils, and patacones.',
-      },
-    ],
+      { id: 'col1', name: 'Hummus Plate', price: 9, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: 'House hummus, roasted garlic, olive oil, fresh pita. Simple and perfect.' },
+      { id: 'col2', name: 'Pad Thai', price: 13, image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80', description: 'Wok rice noodles, tofu or shrimp, tamarind, peanuts, lime. Vegetarian available.' },
+      { id: 'col3', name: 'Lamb Kebab Plate', price: 15, image: 'https://images.unsplash.com/photo-1544025162-d76538823936?w=400&q=80', description: 'Grilled lamb and chicken kebabs, tzatziki, pita, fattoush salad.' },
+      { id: 'col4', name: 'Cold Brew', price: 4, image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80', description: 'Local Chiriquí beans, 18-hour cold brew. Worth waking up for.' },
+    ]
   },
 
   {
     id: '3',
-    name: 'Venao Burger Co',
+    name: 'El Sitio Restaurant',
     category: 'food',
-    // Smash burger, moody lighting, beautiful plating
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80',
-    rating: 4.7,
-    reviews: 188,
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80',
+    rating: 4.1,
+    reviews: 177,
     deliveryTime: '15–25',
-    deliveryFee: 2,
+    deliveryFee: 0,
     minOrder: 8,
-    tags: ['Burgers', 'Comfort Food', 'Craft'],
-    description: 'Grass-fed Azuero beef, double smash, aged cheddar. Started as a weekend pop-up, now open every night. Worth the wait.',
+    tags: ['Seafood', 'Beach Bar', 'Surfer Spot'],
+    description: 'Right on the sand at El Sitio Hotel. Ceviche, grilled fish, cold beer. The original post-surf spot. Laid back, no pretense.',
     products: [
-      {
-        id: 'vb1',
-        name: 'The Venao Smash',
-        price: 13,
-        image: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80',
-        description: 'Double smashed Azuero beef, American cheese, caramelized onion, house pickles, special sauce. Brioche bun.',
-      },
-      {
-        id: 'vb2',
-        name: 'Surf & Turf Burger',
-        price: 17,
-        image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80',
-        description: 'Beef patty, grilled Pacific shrimp, avocado, sriracha mayo, pickled cucumber. The showstopper.',
-      },
-      {
-        id: 'vb3',
-        name: 'Thick-Cut Fries',
-        price: 5,
-        image: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=600&q=80',
-        description: 'Hand-cut local potatoes, sea salt, served with chipotle aioli.',
-      },
-      {
-        id: 'vb4',
-        name: 'Mango Shake',
-        price: 6,
-        image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&q=80',
-        description: 'Fresh Panamanian mango, whole milk, vanilla. Thick enough to stand a spoon in it.',
-      },
-    ],
+      { id: 'es1', name: 'Ceviche Mixto', price: 10, image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=400&q=80', description: 'Shrimp, octopus, corvina. With tostadas and hot sauce.' },
+      { id: 'es2', name: 'Grilled Fish of the Day', price: 16, image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&q=80', description: 'Whatever they caught this morning. Ask your courier.' },
+      { id: 'es3', name: 'Balboa 6-pack', price: 8, image: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80', description: "Panama's national beer. Ice cold. Enough said." },
+    ]
+  },
+
+  {
+    id: '4',
+    name: 'La Hummuseria',
+    category: 'food',
+    image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&q=80',
+    rating: 4.9,
+    reviews: 35,
+    deliveryTime: '20–30',
+    deliveryFee: 2,
+    minOrder: 10,
+    tags: ['Middle Eastern', 'Vegan', 'Board Games'],
+    description: 'Hummus, falafel, and Middle Eastern bowls in a chill spot with board games. Surprisingly great for Panama. Vegan and meat options.',
+    products: [
+      { id: 'hum1', name: 'Classic Hummus Bowl', price: 11, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: "Creamy hummus, olive oil, za'atar, pickled vegetables, pita." },
+      { id: 'hum2', name: 'Falafel Wrap', price: 10, image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf04?w=400&q=80', description: 'Crispy falafel, tahini, greens, pickled cabbage. 100% vegan.' },
+      { id: 'hum3', name: 'Shakshuka', price: 12, image: 'https://images.unsplash.com/photo-1530469912745-a215c6b256ea?w=400&q=80', description: 'Eggs poached in spiced tomato sauce, served with pita. Good for any meal.' },
+    ]
+  },
+
+  {
+    id: '5',
+    name: 'Pizza Gavilan',
+    category: 'food',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80',
+    rating: 4.3,
+    reviews: 167,
+    deliveryTime: '25–40',
+    deliveryFee: 2,
+    minOrder: 12,
+    tags: ['Pizza', 'Italian', 'Beachfront'],
+    description: 'Wood-fired pizza with a beachfront view. The most consistent pizza in Venao — good by any standard, great by Panama\'s.',
+    products: [
+      { id: 'pg1', name: 'Margherita', price: 14, image: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=400&q=80', description: 'San Marzano tomato, fior di latte, basil. The benchmark.' },
+      { id: 'pg2', name: 'Venao Special', price: 18, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80', description: "Shrimp, jalapeño, garlic oil, mozzarella, cilantro. Surfer's pizza." },
+      { id: 'pg3', name: 'Tiramisu', price: 7, image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&q=80', description: 'Homemade. They do it right.' },
+    ]
   },
 
   // ─── DRINKS ──────────────────────────────────────────────────────────────────
 
   {
-    id: '4',
-    name: 'Surf Shack Bar',
+    id: '6',
+    name: 'Wao Beach Bar',
     category: 'drinks',
-    // Tropical beach bar, string lights, ocean background
     image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80',
-    rating: 4.8,
-    reviews: 302,
-    deliveryTime: '15–20',
-    deliveryFee: 1.5,
-    minOrder: 6,
-    tags: ['Bar', 'Beachfront', 'Cold Beer'],
-    description: 'No shots. No neon signs. Just cold beer, reggae on the speaker, and a front-row seat to the break. Surfers\' bar of choice since forever.',
+    rating: 5.0,
+    reviews: 13,
+    deliveryTime: '10–20',
+    deliveryFee: 0,
+    minOrder: 5,
+    tags: ['Beach Bar', 'Cocktails', 'Sunset Views'],
+    description: 'Beachfront bar with the best sunset view in Venao. Creative cocktails, cold beer, and a playlist that fits the vibe.',
     products: [
-      {
-        id: 'ss1',
-        name: 'Balboa 6-Pack (cold)',
-        price: 9,
-        image: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=600&q=80',
-        description: 'Panama\'s original lager. Still the best thing after a 3-hour surf session. Ice cold, delivered in 15 min.',
-      },
-      {
-        id: 'ss2',
-        name: 'Rum Punch Pitcher (1L)',
-        price: 14,
-        image: 'https://images.unsplash.com/photo-1570196922327-4b8044e1a637?w=600&q=80',
-        description: 'House rum, passion fruit, pineapple, fresh lime, mint. Serves 3. Watch the sunset, lose track of time.',
-      },
-      {
-        id: 'ss3',
-        name: 'Michelada',
-        price: 7,
-        image: 'https://images.unsplash.com/photo-1609951651556-5334e2706168?w=600&q=80',
-        description: 'Atlas beer, fresh lime, Worcestershire, Maggi, Tajín-rimmed glass. Panama-style, no tomato juice.',
-      },
-      {
-        id: 'ss4',
-        name: 'Pipa Fría (Coconut Water)',
-        price: 4,
-        image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600&q=80',
-        description: 'Fresh green coconut, chilled and delivered with a straw. The original electrolyte drink.',
-      },
-    ],
-  },
-
-  {
-    id: '5',
-    name: 'El Coco Loco',
-    category: 'drinks',
-    // Beautiful tropical cocktail bar
-    image: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=800&q=80',
-    rating: 4.9,
-    reviews: 156,
-    deliveryTime: '20–30',
-    deliveryFee: 2,
-    minOrder: 10,
-    tags: ['Cocktails', 'Tropical', 'Craft'],
-    description: 'Proper cocktails on the Pacific. House-infused spirits, fresh tropical fruit, zero shortcuts. The bartenders have actually tended bar.',
-    products: [
-      {
-        id: 'ec1',
-        name: 'Coco Loco (signature)',
-        price: 12,
-        image: 'https://images.unsplash.com/photo-1560508180-03f285f67ded?w=600&q=80',
-        description: 'Served inside a whole coconut: white rum, coconut cream, fresh pineapple, passion fruit, mint. Comes with the coconut.',
-      },
-      {
-        id: 'ec2',
-        name: 'Paloma de Venao',
-        price: 9,
-        image: 'https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?w=600&q=80',
-        description: 'Reposado tequila, fresh pink grapefruit, lime, agave, pinch of sea salt. Simple, sharp, refreshing.',
-      },
-      {
-        id: 'ec3',
-        name: 'Natural Smoothie',
-        price: 6,
-        image: 'https://images.unsplash.com/photo-1517473573568-c93870f4e4c9?w=600&q=80',
-        description: 'Your call: mango-ginger, green (spinach, apple, cucumber), or dragon fruit-coconut. All fruit, no powder.',
-      },
-    ],
+      { id: 'wao1', name: 'Venao Sunset', price: 9, image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&q=80', description: 'Dark rum, passion fruit, ginger beer, lime. Order two.' },
+      { id: 'wao2', name: 'Coconut Mojito', price: 8, image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80', description: 'White rum, coconut water, fresh mint, lime. Beach standard.' },
+      { id: 'wao3', name: 'Balboa Draft', price: 4, image: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80', description: "Panama's national beer. Ice cold, straight from the tap." },
+      { id: 'wao4', name: 'Agua de Pipa', price: 3, image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&q=80', description: 'Fresh coconut water. Served in the coconut.' },
+    ]
   },
 
   // ─── GROCERY ─────────────────────────────────────────────────────────────────
 
   {
-    id: '6',
+    id: '7',
     name: 'Minisuper Venao',
     category: 'grocery',
-    // Local market, fresh produce, Panama vibe
-    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80',
-    rating: 4.5,
-    reviews: 231,
-    deliveryTime: '15–30',
-    deliveryFee: 2,
-    minOrder: 10,
-    tags: ['Essentials', 'Fresh Produce', 'Local'],
-    description: 'The one stop. Sunscreen, beer, fresh fruit, snacks, and anything you forgot to pack. If they don\'t have it, nobody in Venao does.',
+    image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=800&q=80',
+    rating: 4.2,
+    reviews: 44,
+    deliveryTime: '15–25',
+    deliveryFee: 1,
+    minOrder: 5,
+    tags: ['Grocery', 'Essentials', 'Local'],
+    description: 'The town store. Beer, water, snacks, sunscreen, fresh fruit. Everything you need, nothing you don\'t.',
     products: [
-      {
-        id: 'mv1',
-        name: 'Tropical Fruit Box',
-        price: 9,
-        image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=600&q=80',
-        description: 'Whatever\'s in season: mango, piña, papaya, sandía. Cut and ready. Locally sourced within 30km.',
-      },
-      {
-        id: 'mv2',
-        name: 'Cold Beer 6-pack',
-        price: 8,
-        image: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=600&q=80',
-        description: 'Balboa or Atlas. Your call. Panama\'s two finest, both are correct.',
-      },
-      {
-        id: 'mv3',
-        name: 'Sunscreen SPF50 + Aloe Gel',
-        price: 14,
-        image: 'https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=600&q=80',
-        description: 'Water-resistant, reef-safe. After-sun aloe vera included. You will need both.',
-      },
-      {
-        id: 'mv4',
-        name: 'Snack Bundle',
-        price: 10,
-        image: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=600&q=80',
-        description: 'Chips, nuts, granola, dark chocolate. Enough fuel for a long session.',
-      },
-      {
-        id: 'mv5',
-        name: 'Bag of Ice (5kg)',
-        price: 4,
-        image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=600&q=80',
-        description: 'For the cooler. Essential for beach days and boat trips.',
-      },
-    ],
+      { id: 'ms1', name: 'Tropical Fruit Box', price: 8, image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=400&q=80', description: 'Papaya, mango, pineapple, watermelon. Seasonal and fresh-cut.' },
+      { id: 'ms2', name: 'Balboa 12-pack', price: 14, image: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80', description: 'Cold and ready.' },
+      { id: 'ms3', name: 'Sunscreen Kit', price: 18, image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80', description: 'SPF 50, aloe vera gel, reef-safe formula.' },
+      { id: 'ms4', name: 'Water (6-pack 1.5L)', price: 5, image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&q=80', description: 'Stay hydrated. Panama sun is no joke.' },
+    ]
   },
 
   // ─── WELLNESS ────────────────────────────────────────────────────────────────
 
   {
-    id: '7',
+    id: '8',
     name: 'Venao Wellness',
     category: 'massage',
-    // Beachside spa, peaceful, lush
-    image: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80',
-    rating: 5.0,
-    reviews: 112,
-    deliveryTime: '30–60',
-    deliveryFee: 0,
-    minOrder: 0,
-    tags: ['Massage', 'Wellness', 'Mobile'],
-    description: 'We come to you. Beach, bungalow, or hammock. Certified therapists, quality oils, no upsell. Book 1h ahead — slots go fast on weekends.',
-    products: [
-      {
-        id: 'vw1',
-        name: 'Swedish Relaxation (60 min)',
-        price: 55,
-        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80',
-        description: 'Full-body effleurage and petrissage. Great for first-timers. Aromatherapy oils included.',
-      },
-      {
-        id: 'vw2',
-        name: 'Deep Tissue (90 min)',
-        price: 75,
-        image: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&q=80',
-        description: 'Slow, firm pressure targeting chronic tension. Highly recommended after two days of overhead surf.',
-      },
-      {
-        id: 'vw3',
-        name: 'Couples Massage (60 min)',
-        price: 100,
-        image: 'https://images.unsplash.com/photo-1610289982320-3d77778b0c56?w=600&q=80',
-        description: 'Two therapists, side by side. On the beach at sunset if you want. Book the 5pm slot before someone else does.',
-      },
-      {
-        id: 'vw4',
-        name: 'Hot Stone Therapy (75 min)',
-        price: 80,
-        image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=600&q=80',
-        description: 'Basalt stones, lavender oil, the whole ritual. Your most expensive nap ever. Worth it.',
-      },
-    ],
-  },
-
-  // ─── SURF ────────────────────────────────────────────────────────────────────
-
-  {
-    id: '8',
-    name: 'Venao Surf School',
-    category: 'surf',
-    // Surf lesson, turquoise water, instructor in frame
-    image: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80',
-    rating: 4.9,
-    reviews: 478,
+    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+    rating: 4.8,
+    reviews: 62,
     deliveryTime: 'On request',
     deliveryFee: 0,
-    minOrder: 0,
-    tags: ['Lessons', 'Rentals', 'All Levels'],
-    description: 'On the break since 2009. ISA-certified instructors. Small groups, no circus lineups. Boards delivered to your spot.',
+    minOrder: 40,
+    tags: ['Massage', 'Yoga', 'Beach Delivery'],
+    description: 'Sports massage, Swedish relaxation, yoga sessions. Beach or bungalow delivery. Book in advance for sunset slots.',
     products: [
-      {
-        id: 'vs1',
-        name: 'Beginner Lesson (2h)',
-        price: 45,
-        image: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=600&q=80',
-        description: 'Foam board, rash guard, wax, ISA instructor. Safety briefing, then straight in the water. Max 4 students.',
-      },
-      {
-        id: 'vs2',
-        name: 'Intermediate Clinic (1.5h)',
-        price: 55,
-        image: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=600&q=80',
-        description: 'Focus on pop-up, wave selection, and positioning. Video analysis available. Max 3 students.',
-      },
-      {
-        id: 'vs3',
-        name: 'Longboard Rental (full day)',
-        price: 25,
-        image: 'https://images.unsplash.com/photo-1531722569936-825d4eea9972?w=600&q=80',
-        description: '9\'0 foam or fibreglass. Leash, wax included. Delivered to the beach. Back by 5pm.',
-      },
-      {
-        id: 'vs4',
-        name: 'Shortboard Rental (full day)',
-        price: 20,
-        image: 'https://images.unsplash.com/photo-1503178845447-bc913b5de0e4?w=600&q=80',
-        description: '5\'10–6\'4 range. Thruster or quad. For surfers who know what they\'re doing.',
-      },
-    ],
+      { id: 'vw1', name: 'Swedish (60 min)', price: 55, image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&q=80', description: 'Full body Swedish massage. Beach or bungalow, your choice.' },
+      { id: 'vw2', name: 'Sports Recovery (45 min)', price: 45, image: 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=400&q=80', description: 'Deep tissue — back, legs, shoulders. For surfers.' },
+      { id: 'vw3', name: 'Sunrise Yoga (1 hr)', price: 20, image: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?w=400&q=80', description: 'Sunrise session on the beach. All levels welcome.' },
+    ]
   },
 
-  // ─── STAY ────────────────────────────────────────────────────────────────────
+  // ─── SURF ─────────────────────────────────────────────────────────────────────
 
   {
     id: '9',
-    name: 'Playa Venao Hotel',
-    category: 'hotel',
-    // Beachfront hotel pool, lush jungle, Pacific
-    image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80',
-    rating: 4.8,
-    reviews: 589,
+    name: 'El Sitio Surf School',
+    category: 'surf',
+    image: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=800&q=80',
+    rating: 4.6,
+    reviews: 89,
     deliveryTime: 'On request',
     deliveryFee: 0,
-    minOrder: 0,
-    tags: ['Beachfront', 'Pool', 'In-room Service'],
-    description: 'The resort at the end of the road. Thatched bungalows, infinity pool, and direct access to the break. Request anything from your room.',
+    minOrder: 20,
+    tags: ['Surf Lessons', 'Board Rental', 'All Levels'],
+    description: 'The original Venao surf school. Board rental, group lessons, private coaching. All levels welcome.',
     products: [
-      {
-        id: 'pv1',
-        name: 'In-Room Breakfast',
-        price: 18,
-        image: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=600&q=80',
-        description: 'Eggs your way, fresh tropical fruit, toast, Panamanian coffee. Delivered before 10am.',
-      },
-      {
-        id: 'pv2',
-        name: 'Laundry Service',
-        price: 12,
-        image: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=600&q=80',
-        description: 'Drop off by 9am, back by 5pm. Wash, dry, fold. Includes the rash guard you\'ve been ignoring.',
-      },
-      {
-        id: 'pv3',
-        name: 'Sunset Boat Tour (2h)',
-        price: 65,
-        image: 'https://images.unsplash.com/photo-1559519529-0936e4058364?w=600&q=80',
-        description: 'Private panga along the Venao coastline, snorkeling, cold drinks. Leaves at 4:30pm. Book by noon.',
-      },
-      {
-        id: 'pv4',
-        name: 'Airport Transfer (David)',
-        price: 120,
-        image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80',
-        description: 'A/C SUV, David Chiriquí Airport. 3.5h drive, up to 4 passengers, luggage included. Driver speaks English.',
-      },
-    ],
+      { id: 'surf1', name: 'Board Rental (half day)', price: 20, image: 'https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=400&q=80', description: 'Foam or fiberglass, your size. Includes leash and wax.' },
+      { id: 'surf2', name: 'Group Lesson (2 hrs)', price: 35, image: 'https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=400&q=80', description: 'Max 6 students. Theory + water time. Foam board included.' },
+      { id: 'surf3', name: 'Private Session (1 hr)', price: 60, image: 'https://images.unsplash.com/photo-1520443240718-fce21901db79?w=400&q=80', description: '1:1 with an instructor. Fastest way to progress.' },
+    ]
   },
+
 ]
 
-export const couriers = [
-  { id: 'c1', name: 'Carlos M.', vehicle: 'Moto', rating: 4.9, deliveries: 234, online: true },
-  { id: 'c2', name: 'Ana R.', vehicle: 'Bici', rating: 4.8, deliveries: 156, online: true },
-  { id: 'c3', name: 'Pedro V.', vehicle: 'Moto', rating: 4.7, deliveries: 89, online: false },
-]
-
+// ─── ACTIVE ORDER (demo state for TrackOrderPage) ─────────────────────────────
 export const activeOrder = {
-  id: 'ord-001',
-  business: businesses[0],
-  status: 'picked_up' as const,
-  items: [
-    { product: businesses[0].products[0], qty: 2 },
-    { product: businesses[0].products[1], qty: 1 },
-  ],
-  subtotal: 35,
-  deliveryFee: 2,
-  tip: 3,
-  total: 40,
-  courier: couriers[0],
   eta: '8 min',
-  placedAt: '19:42',
+  courier: { name: 'Carlos M.', rating: 4.9 },
+  items: [
+    { product: { id: 'lq1', name: 'Ceviche de Corvina', price: 12, image: '', description: '' }, qty: 2 },
+    { product: { id: 'es3', name: 'Balboa 6-pack', price: 8, image: '', description: '' }, qty: 1 },
+  ],
+  total: 32,
+  tip: 0,
+  deliveryFee: 2,
 }
-
-export const sampleOrders = [
-  { id: 'ord-001', business: businesses[0], status: 'delivered', total: 40, date: 'Today', items: 3 },
-  { id: 'ord-002', business: businesses[2], status: 'delivered', total: 26, date: 'Yesterday', items: 2 },
-  { id: 'ord-003', business: businesses[6], status: 'delivered', total: 55, date: 'Feb 17', items: 1 },
-]
