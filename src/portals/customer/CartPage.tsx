@@ -41,7 +41,13 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
           <h1 className="text-xl font-bold text-gray-900">Your Order</h1>
         </div>
         <div className="text-center py-20">
-          <div className="text-6xl mb-4">🛒</div>
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
           <p className="text-gray-500 text-lg font-medium">Your cart is empty</p>
           <p className="text-gray-400 text-sm mt-1">Add items from a business to get started</p>
           <button onClick={() => navigate('/')} className="btn-primary mt-6">Browse businesses</button>
@@ -64,7 +70,10 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
           <img src={biz.image} alt={biz.name} className="w-12 h-12 rounded-xl object-cover" />
           <div>
             <p className="font-bold text-gray-900">{biz.name}</p>
-            <p className="text-xs text-gray-500">{biz.deliveryTime} min · ${biz.deliveryFee} delivery</p>
+            <p className="text-xs text-gray-500">
+            {biz.deliveryTime === 'On request' ? 'On request' : `${biz.deliveryTime} min`}
+            {biz.deliveryFee > 0 ? ` · $${biz.deliveryFee} delivery` : ' · Free delivery'}
+          </p>
           </div>
         </div>
       )}
@@ -95,7 +104,7 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
 
       {/* Delivery address */}
       <div className="card p-4 mb-4">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">📍 Delivery address</label>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">Delivery address</label>
         <input
           value={address}
           onChange={e => setAddress(e.target.value)}
@@ -111,7 +120,7 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
           <span className="font-medium">${subtotal.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-sm text-gray-600 mb-3">
-          <span>🛵 Delivery fee</span>
+          <span>Delivery fee</span>
           <span className="font-medium">${deliveryFee.toFixed(2)}</span>
         </div>
 
@@ -137,7 +146,7 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
       </div>
 
       {/* Place Order */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-4 bg-[#F8F7F4] border-t border-gray-100">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-4 bg-[#F5F3EE] border-t border-gray-100">
         <button
           onClick={handlePlaceOrder}
           disabled={placed}

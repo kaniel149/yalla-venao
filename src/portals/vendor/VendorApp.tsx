@@ -14,12 +14,15 @@ export default function VendorApp() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4]">
+    <div className="min-h-screen bg-[#F5F3EE]">
       <div className="max-w-md mx-auto">
-        {/* Top Nav */}
+        {/* Header */}
         <div className="bg-[#1B4332] px-4 pt-10 pb-1 sticky top-0 z-50">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-white font-bold text-lg">🍽️ Vendor Portal</span>
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="text-white/50 text-[10px] font-semibold uppercase tracking-widest">Vendor Portal</p>
+              <h1 className="serif text-white text-xl">Yalla Venao</h1>
+            </div>
           </div>
           <div className="flex">
             {tabs.map(tab => {
@@ -28,7 +31,9 @@ export default function VendorApp() {
                 <button
                   key={tab.path}
                   onClick={() => navigate(tab.path)}
-                  className={`flex-1 py-2.5 text-sm font-semibold transition-all border-b-2 ${active ? 'text-white border-[#FF6B35]' : 'text-white/50 border-transparent hover:text-white/80'}`}
+                  className={`flex-1 py-2.5 text-sm font-semibold transition-all border-b-2 ${
+                    active ? 'text-white border-[#FF6B35]' : 'text-white/50 border-transparent hover:text-white/80'
+                  }`}
                 >
                   {tab.label}
                 </button>

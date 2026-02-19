@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yalla Venao — Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #f8f5f0; }
+
+    .gradient-hero {
+      background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 50%, #1B4332 100%);
+    }
+
+    .card-glow:hover {
+      box-shadow: 0 20px 60px rgba(255, 107, 53, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .btn-customer {
+      background: linear-gradient(135deg, #FF6B35, #E85520);
+    }
+    .btn-vendor {
+      background: linear-gradient(135deg, #1B4332, #2D6A4F);
+    }
+    .btn-courier {
+      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    }
+
+    .wave-divider {
+      background: #f8f5f0;
+      clip-path: ellipse(100% 40% at 50% 0%);
+      height: 60px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .float { animation: float 3s ease-in-out infinite; }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .live-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .phone-mockup {
+      background: #1a1a2e;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.3), inset 0 0 0 2px rgba(255,255,255,0.1);
+      position: relative;
+    }
+    .phone-mockup::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 6px;
+      background: #2a2a3e;
+      border-radius: 3px;
+      z-index: 2;
+    }
+    .phone-screen {
+      background: #f8f5f0;
+      border-radius: 30px;
+      overflow: hidden;
+      aspect-ratio: 9/19.5;
+      position: relative;
+    }
+    .phone-ui-header {
+      background: linear-gradient(135deg, #1B4332, #2D6A4F);
+      padding: 40px 16px 20px;
+    }
+    .phone-ui-card {
+      background: white;
+      border-radius: 16px;
+      padding: 12px;
+      margin: 0 12px 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <div class="gradient-hero min-h-[50vh] flex flex-col items-center justify-center text-center px-6 pt-16 pb-0 relative overflow-hidden">
+
+    <!-- Background decoration -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-10 left-10 text-6xl opacity-10 float" style="animation-delay:0s">🌊</div>
+      <div class="absolute top-20 right-8 text-5xl opacity-10 float" style="animation-delay:1s">🏄</div>
+      <div class="absolute bottom-20 left-6 text-4xl opacity-10 float" style="animation-delay:0.5s">🌴</div>
+      <div class="absolute bottom-16 right-12 text-5xl opacity-10 float" style="animation-delay:1.5s">🌺</div>
+    </div>
+
+    <!-- Live badge -->
+    <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/90 text-xs font-semibold px-4 py-2 rounded-full mb-6 border border-white/20">
+      <span class="w-2 h-2 rounded-full bg-green-400 live-dot"></span>
+      Live Demo — Playa Venao, Panama
+    </div>
+
+    <!-- Logo -->
+    <div class="mb-4">
+      <div class="inline-flex items-center gap-3 mb-2">
+        <div class="w-14 h-14 rounded-2xl bg-[#FF6B35] flex items-center justify-center text-3xl shadow-lg">🌴</div>
+        <div class="text-left">
+          <h1 class="text-4xl font-black text-white leading-none tracking-tight">Yalla Venao</h1>
+          <p class="text-[#FF6B35] font-semibold text-sm mt-0.5">يلا فيناو</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tagline -->
+    <p class="text-white text-2xl font-bold mb-2">Paradise, on demand 🌴</p>
+    <p class="text-white/70 text-base max-w-sm mb-10 leading-relaxed">
+      The everything-app for Playa Venao. Food, drinks, surf gear, wellness — delivered to your beach.
+    </p>
+
+    <!-- Phone Mockup -->
+    <div class="w-52 mx-auto float" style="animation-delay:0.3s">
+      <div class="phone-mockup">
+        <div class="phone-screen">
+          <!-- Fake phone UI -->
+          <div class="phone-ui-header">
+            <div class="flex items-center gap-1 mb-2">
+              <span class="text-white/70 text-xs">📍 Playa Venao, Panama</span>
+            </div>
+            <div class="text-white font-bold text-sm mb-2">What are you craving?</div>
+            <div class="bg-white rounded-full px-3 py-1.5 flex items-center gap-2">
+              <span class="text-gray-400 text-xs">🔍</span>
+              <span class="text-gray-400 text-xs">Search food, drinks...</span>
+            </div>
+          </div>
+          <!-- Hero banner -->
+          <div class="mx-3 mt-3 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#E85520] p-3 flex items-center justify-between">
+            <div>
+              <div class="text-white font-extrabold text-xs">Yalla Venao</div>
+              <div class="text-white/70 text-[9px]">Delivered in 20 min</div>
+            </div>
+            <span class="text-2xl">🌊</span>
+          </div>
+          <!-- Mini cards -->
+          <div class="mx-3 mt-3 space-y-2">
+            <div class="phone-ui-card flex items-center gap-2">
+              <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-lg flex-shrink-0">🍹</div>
+              <div>
+                <div class="font-semibold text-gray-900 text-[10px]">La Lora Beach Bar</div>
+                <div class="text-gray-500 text-[9px]">⭐ 4.9 · 20-30 min · $2</div>
+              </div>
+            </div>
+            <div class="phone-ui-card flex items-center gap-2">
+              <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-lg flex-shrink-0">🏄</div>
+              <div>
+                <div class="font-semibold text-gray-900 text-[10px]">Venao Surf School</div>
+                <div class="text-gray-500 text-[9px]">⭐ 4.9 · On demand · Free</div>
+              </div>
+            </div>
+            <div class="phone-ui-card flex items-center gap-2">
+              <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center text-lg flex-shrink-0">💆</div>
+              <div>
+                <div class="font-semibold text-gray-900 text-[10px]">Venao Wellness</div>
+                <div class="text-gray-500 text-[9px]">⭐ 5.0 · 30-60 min · Free</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wave divider -->
+    <div class="wave-divider w-full mt-0"></div>
+  </div>
+
+  <!-- Portal Cards Section -->
+  <div class="px-4 py-10 max-w-lg mx-auto -mt-4">
+    <h2 class="text-center text-gray-900 font-black text-2xl mb-2">Choose your role</h2>
+    <p class="text-center text-gray-500 text-sm mb-8">Tap any card to explore that portal. No login required.</p>
+
+    <div class="space-y-4">
+
+      <!-- Customer Card -->
+      <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-glow transition-all duration-300">
+        <div class="bg-gradient-to-r from-[#FF6B35] to-[#E85520] p-5 flex items-center gap-4">
+          <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-4xl">🛍️</div>
+          <div>
+            <div class="role-badge bg-white/20 text-white mb-1">Customer Portal</div>
+            <h3 class="text-white text-xl font-extrabold leading-tight">Browse & Order</h3>
+          </div>
+        </div>
+        <div class="p-5">
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            Explore local restaurants, beach bars, surf shops, and wellness services. Add to cart, track your order live, and tip your courier — all in one app.
+          </p>
+          <div class="flex gap-2 flex-wrap mb-5">
+            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">🏖️ Browse businesses</span>
+            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">🛒 Add to cart</span>
+            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">📍 Live tracking</span>
+          </div>
+          <a href="/" class="block w-full btn-customer text-white text-center font-bold text-base py-4 rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-md">
+            Open Customer App →
+          </a>
+        </div>
+      </div>
+
+      <!-- Vendor Card -->
+      <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-glow transition-all duration-300">
+        <div class="bg-gradient-to-r from-[#1B4332] to-[#2D6A4F] p-5 flex items-center gap-4">
+          <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-4xl">🍽️</div>
+          <div>
+            <div class="role-badge bg-white/20 text-white mb-1">Vendor Portal</div>
+            <h3 class="text-white text-xl font-extrabold leading-tight">Manage Restaurant</h3>
+          </div>
+        </div>
+        <div class="p-5">
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            Accept and manage incoming orders, update your menu, toggle open/closed status, and track daily revenue — built for busy kitchens.
+          </p>
+          <div class="flex gap-2 flex-wrap mb-5">
+            <span class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-medium">📦 Live orders</span>
+            <span class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-medium">🍳 Kitchen view</span>
+            <span class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-medium">💵 Revenue stats</span>
+          </div>
+          <a href="/vendor" class="block w-full btn-vendor text-white text-center font-bold text-base py-4 rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-md">
+            Open Vendor App →
+          </a>
+        </div>
+      </div>
+
+      <!-- Courier Card -->
+      <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-glow transition-all duration-300">
+        <div class="bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] p-5 flex items-center gap-4">
+          <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-4xl">🛵</div>
+          <div>
+            <div class="role-badge bg-white/20 text-white mb-1">Courier Portal</div>
+            <h3 class="text-white text-xl font-extrabold leading-tight">Deliver Orders</h3>
+          </div>
+        </div>
+        <div class="p-5">
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            Go online, accept delivery requests, navigate to pickup and drop-off, and track your earnings — your personal delivery command center.
+          </p>
+          <div class="flex gap-2 flex-wrap mb-5">
+            <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">🟢 Go online</span>
+            <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">📱 Accept jobs</span>
+            <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">💰 Track earnings</span>
+          </div>
+          <a href="/courier" class="block w-full btn-courier text-white text-center font-bold text-base py-4 rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-md">
+            Open Courier App →
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Businesses Preview -->
+    <div class="mt-12 mb-6">
+      <h3 class="text-center text-gray-900 font-bold text-lg mb-1">9 local businesses on the platform</h3>
+      <p class="text-center text-gray-500 text-sm mb-6">Real Playa Venao vibes, mock data, zero commitment.</p>
+      <div class="grid grid-cols-3 gap-3">
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-100 flex items-center justify-center text-2xl mb-2">🍺</div>
+          <div class="text-xs font-semibold text-gray-700">La Lora</div>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-yellow-100 flex items-center justify-center text-2xl mb-2">🍲</div>
+          <div class="text-xs font-semibold text-gray-700">Donde Viejo</div>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-red-100 flex items-center justify-center text-2xl mb-2">🍔</div>
+          <div class="text-xs font-semibold text-gray-700">Venao Burger Co</div>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-blue-100 flex items-center justify-center text-2xl mb-2">🍹</div>
+          <div class="text-xs font-semibold text-gray-700">Surf Shack Bar</div>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-pink-100 flex items-center justify-center text-2xl mb-2">🥥</div>
+          <div class="text-xs font-semibold text-gray-700">El Coco Loco</div>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-green-100 flex items-center justify-center text-2xl mb-2">🛒</div>
+          <div class="text-xs font-semibold text-gray-700">Minisuper Venao</div>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-purple-100 flex items-center justify-center text-2xl mb-2">💆</div>
+          <div class="text-xs font-semibold text-gray-700">Venao Wellness</div>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-teal-100 flex items-center justify-center text-2xl mb-2">🏄</div>
+          <div class="text-xs font-semibold text-gray-700">Surf School</div>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-100 flex items-center justify-center text-2xl mb-2">🏡</div>
+          <div class="text-xs font-semibold text-gray-700">Venao Hotel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-10 pb-10 text-center">
+      <div class="inline-flex items-center gap-2 mb-3">
+        <div class="w-8 h-8 rounded-xl bg-[#FF6B35] flex items-center justify-center text-lg">🌴</div>
+        <span class="font-black text-gray-900 text-lg">Yalla Venao</span>
+      </div>
+      <p class="text-gray-400 text-xs">Built for Playa Venao, Panama 🇵🇦</p>
+      <p class="text-gray-300 text-xs mt-1">Demo environment · No real orders</p>
+    </div>
+  </div>
+
+</body>
+</html>

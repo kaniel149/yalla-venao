@@ -5,58 +5,102 @@ interface Props {
   onBusinessClick: (id: string) => void
 }
 
+function DeliveryTime({ time }: { time: string }) {
+  if (time === 'On request') return <span>On request</span>
+  return <span>{time} min</span>
+}
+
 export default function ExplorePage({ onBusinessClick }: Props) {
   const [selected, setSelected] = useState('all')
-  const filtered = selected === 'all' ? businesses : businesses.filter(b => b.category === selected)
+
+  const filtered = selected === 'all'
+    ? businesses
+    : businesses.filter(b => b.category === selected)
 
   return (
-    <div className="pb-24 pt-4 px-4">
-      <h1 className="text-2xl font-bold text-gray-900 mb-4">Explore</h1>
+    <div className="pb-24 pt-5 px-4">
+      <h1 className="text-[22px] font-extrabold text-gray-900 mb-1 tracking-tight">Explore Venao</h1>
+      <p className="text-gray-500 text-sm mb-5">Everything the beach has to offer.</p>
 
-      {/* Category filter */}
-      <div className="flex gap-2 overflow-x-auto pb-2 mb-4 -mx-1 px-1">
+      {/* ── Category filter — pill style ─────────────────────────────────── */}
+      <div className="flex gap-2 overflow-x-auto pb-2 mb-5 -mx-4 px-4 scrollbar-hide">
         <button
           onClick={() => setSelected('all')}
-          className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${selected === 'all' ? 'bg-[#FF6B35] text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200'}`}
-        >All</button>
+          className={`flex-shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all border ${
+            selected === 'all'
+              ? 'bg-[#1B4332] text-white border-[#1B4332]'
+              : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          All
+        </button>
         {categories.map(c => (
           <button
             key={c.id}
             onClick={() => setSelected(c.id)}
-            className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${selected === c.id ? 'bg-[#FF6B35] text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200'}`}
+            className={`flex-shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all border ${
+              selected === c.id
+                ? 'bg-[#1B4332] text-white border-[#1B4332]'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+            }`}
           >
-            {c.emoji} {c.label}
+            {c.label}
           </button>
         ))}
       </div>
 
-      {/* Results */}
-      <p className="text-xs text-gray-400 mb-3">{filtered.length} results</p>
+      {/* ── Results count ─────────────────────────────────────────────────── */}
+      <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wide mb-3">
+        {filtered.length} {filtered.length === 1 ? 'result' : 'results'}
+      </p>
+
+      {/* ── Business list ─────────────────────────────────────────────────── */}
       <div className="space-y-3">
         {filtered.map(b => (
-          <div key={b.id} className="card cursor-pointer hover:shadow-md transition-all active:scale-[0.99]" onClick={() => onBusinessClick(b.id)}>
+          <button
+            key={b.id}
+            className="w-full bg-white rounded-2xl overflow-hidden shadow-sm text-left hover:shadow-md transition-all active:scale-[0.99]"
+            onClick={() => onBusinessClick(b.id)}
+          >
             <div className="relative">
-              <img src={b.image} alt={b.name} className="w-full h-36 object-cover" />
-              <span className="absolute top-2 left-2 bg-[#1B4332] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Open</span>
+              <img src={b.image} alt={b.name} className="w-full h-40 object-cover" />
+              <span className="absolute top-2 left-2 bg-[#1B4332] text-white text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wide uppercase">Open</span>
+              {b.deliveryFee === 0 && (
+                <span className="absolute top-2 right-2 bg-white/90 text-[#1B4332] text-[9px] font-bold px-2 py-0.5 rounded-full">Free delivery</span>
+              )}
             </div>
-            <div className="p-3">
-              <div className="flex items-center justify-between mb-1">
-                <h3 className="font-bold text-gray-900">{b.name}</h3>
-                <span className="text-yellow-500 font-semibold text-sm">⭐ {b.rating}</span>
+            <div className="px-4 py-3">
+              <div className="flex items-center justify-between mb-0.5">
+                <h3 className="font-bold text-gray-900 text-[15px]">{b.name}</h3>
+                <span className="text-amber-500 font-semibold text-[13px] ml-2 flex-shrink-0">{b.rating} ★</span>
               </div>
-              <p className="text-xs text-gray-500 mb-2">{b.description}</p>
-              <div className="flex items-center gap-3 text-xs text-gray-500">
-                <span>⏱️ {b.deliveryTime} min</span>
-                <span>🛵 ${b.deliveryFee}</span>
+              <p className="text-[12px] text-gray-500 mb-2 line-clamp-2 leading-relaxed">{b.description}</p>
+              <div className="flex gap-1.5 flex-wrap mb-2">
+                {b.tags.map(t => (
+                  <span key={t} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md font-medium">{t}</span>
+                ))}
+              </div>
+              <div className="flex items-center gap-3 text-[12px] text-gray-500 border-t border-gray-50 pt-2">
+                <DeliveryTime time={b.deliveryTime} />
+                <span className="text-gray-200">·</span>
+                {b.deliveryFee > 0
+                  ? <span>${b.deliveryFee} delivery</span>
+                  : <span className="text-[#1B4332] font-medium">Free delivery</span>
+                }
               </div>
             </div>
-          </div>
+          </button>
         ))}
+
         {filtered.length === 0 && (
           <div className="text-center py-16">
-            <div className="text-5xl mb-3">🏄</div>
-            <p className="text-gray-500 font-medium">No results in this category</p>
-            <p className="text-gray-400 text-sm mt-1">More vendors coming soon!</p>
+            <img
+              src="https://images.unsplash.com/photo-1455729552865-3658a5d39692?w=400&q=60"
+              alt="Surfing"
+              className="w-20 h-20 object-cover rounded-full mx-auto mb-4 opacity-40"
+            />
+            <p className="text-gray-500 font-medium">Nothing here yet</p>
+            <p className="text-gray-400 text-sm mt-1">More vendors joining soon</p>
           </div>
         )}
       </div>

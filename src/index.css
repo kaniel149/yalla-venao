@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* { font-family: 'Inter', sans-serif; }
-body { background: #F8F7F4; }
+* { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+body { background: #F5F3EE; }
+
+h1, h2, .serif { font-family: 'DM Serif Display', Georgia, serif; }
 
 .card { @apply bg-white rounded-2xl shadow-sm overflow-hidden; }
 .btn-primary { @apply bg-[#FF6B35] text-white font-semibold py-3 px-6 rounded-full transition-all duration-200 hover:bg-[#E85520] active:scale-95; }
@@ -13,6 +17,7 @@ body { background: #F8F7F4; }
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
 }
-.animate-pulse-dot {
-  animation: pulse-dot 1.5s ease-in-out infinite;
-}
+.animate-pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

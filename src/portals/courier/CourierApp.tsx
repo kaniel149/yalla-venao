@@ -7,29 +7,41 @@ export default function CourierApp() {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4]">
+    <div className="min-h-screen bg-[#F5F3EE]">
       <div className="max-w-md mx-auto">
         {/* Header */}
-        <div className="bg-[#1A1A2E] px-4 pt-10 pb-4 sticky top-0 z-50">
-          <div className="flex items-center justify-between">
+        <div className="bg-[#1B4332] px-4 pt-10 pb-3 sticky top-0 z-50">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h1 className="text-white font-extrabold text-xl">🏍️ Courier</h1>
-              <p className="text-white/50 text-xs">Carlos M.</p>
+              <p className="text-white/50 text-[10px] font-semibold uppercase tracking-widest">Courier Portal</p>
+              <h1 className="serif text-white text-xl">Yalla Venao</h1>
             </div>
             <div className="text-right">
-              <p className="text-white/70 text-xs">Today</p>
-              <p className="text-white font-bold">$42 earned</p>
+              <p className="text-white/50 text-[10px] font-medium">Today's earnings</p>
+              <p className="text-white font-bold">$42.00</p>
             </div>
           </div>
-          <div className="flex gap-2 mt-3">
+          <div className="flex gap-2">
             <button
               onClick={() => navigate('/courier')}
-              className={`flex-1 py-2 rounded-full text-sm font-bold transition-all ${location.pathname === '/courier' ? 'bg-[#FF6B35] text-white' : 'bg-white/10 text-white/60'}`}
-            >Dashboard</button>
+              className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all ${
+                location.pathname === '/courier'
+                  ? 'bg-white text-[#1B4332]'
+                  : 'bg-white/10 text-white/60 hover:bg-white/20'
+              }`}
+            >
+              Dashboard
+            </button>
             <button
               onClick={() => navigate('/courier/delivery')}
-              className={`flex-1 py-2 rounded-full text-sm font-bold transition-all ${location.pathname === '/courier/delivery' ? 'bg-[#FF6B35] text-white' : 'bg-white/10 text-white/60'}`}
-            >Active Delivery</button>
+              className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all ${
+                location.pathname === '/courier/delivery'
+                  ? 'bg-white text-[#1B4332]'
+                  : 'bg-white/10 text-white/60 hover:bg-white/20'
+              }`}
+            >
+              Active Delivery
+            </button>
           </div>
         </div>
 

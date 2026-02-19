@@ -3,11 +3,11 @@ import { useState } from 'react'
 type Status = 'active' | 'pending' | 'rejected'
 
 const initialCouriers = [
-  { id: 'c1', name: 'Carlos M.', vehicle: '🏍️ Motorcycle', rating: 4.9, deliveries: 156, earnings: '$892', status: 'active' as Status },
+  { id: 'c1', name: 'Carlos M.', vehicle: 'Motorcycle', rating: 4.9, deliveries: 156, earnings: '$892', status: 'active' as Status },
   { id: 'c2', name: 'Diego R.', vehicle: '🚲 Bicycle', rating: 4.7, deliveries: 89, earnings: '$534', status: 'active' as Status },
-  { id: 'c3', name: 'Ana L.', vehicle: '🏍️ Motorcycle', rating: 4.8, deliveries: 44, earnings: '$288', status: 'active' as Status },
+  { id: 'c3', name: 'Ana L.', vehicle: 'Motorcycle', rating: 4.8, deliveries: 44, earnings: '$288', status: 'active' as Status },
   { id: 'c4', name: 'Marco V.', vehicle: '🛵 Scooter', rating: 4.5, deliveries: 23, earnings: '$156', status: 'active' as Status },
-  { id: 'c5', name: 'Sofia P.', vehicle: '🏍️ Motorcycle', rating: 0, deliveries: 0, earnings: '$0', status: 'pending' as Status },
+  { id: 'c5', name: 'Sofia P.', vehicle: 'Motorcycle', rating: 0, deliveries: 0, earnings: '$0', status: 'pending' as Status },
   { id: 'c6', name: 'Luis G.', vehicle: '🚲 Bicycle', rating: 0, deliveries: 0, earnings: '$0', status: 'pending' as Status },
 ]
 
