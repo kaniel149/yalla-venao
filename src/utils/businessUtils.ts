@@ -1,6 +1,11 @@
+// Returns current hour in Panama time (UTC-5, no DST)
+function panamaHour(): number {
+  return new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Panama' })).getHours()
+}
+
 // Returns true if business is open right now
 export function isOpen(hours: { open: number; close: number }): boolean {
-  const h = new Date().getHours()
+  const h = panamaHour()
   if (hours.close === 0) return h >= hours.open // midnight close
   if (hours.close < hours.open) return h >= hours.open || h < hours.close // overnight
   return h >= hours.open && h < hours.close
@@ -13,7 +18,7 @@ export function openLabel(hours: { open: number; close: number }): string {
     if (h === 12) return '12pm'
     return h < 12 ? `${h}am` : `${h - 12}pm`
   }
-  if (isOpen(hours)) return `Open · Closes ${fmt(hours.close === 0 ? 24 : hours.close)}`
+  if (isOpen(hours)) return `Open · Closes ${hours.close === 0 ? '12am' : fmt(hours.close)}`
   return `Closed · Opens ${fmt(hours.open)}`
 }
 

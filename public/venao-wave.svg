@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <style>
+      @keyframes wave1 {
+        0%   { d: path("M0,220 C60,190 100,240 160,220 C220,200 260,240 320,220 C360,205 390,215 400,210 L400,400 L0,400 Z"); }
+        50%  { d: path("M0,230 C60,210 100,250 160,230 C220,210 260,250 320,230 C360,215 390,225 400,220 L400,400 L0,400 Z"); }
+        100% { d: path("M0,220 C60,190 100,240 160,220 C220,200 260,240 320,220 C360,205 390,215 400,210 L400,400 L0,400 Z"); }
+      }
+      @keyframes wave2 {
+        0%   { d: path("M0,250 C80,230 120,265 180,250 C240,235 280,265 340,250 C370,240 395,248 400,245 L400,400 L0,400 Z"); }
+        50%  { d: path("M0,240 C80,220 120,255 180,240 C240,225 280,255 340,240 C370,230 395,238 400,235 L400,400 L0,400 Z"); }
+        100% { d: path("M0,250 C80,230 120,265 180,250 C240,235 280,265 340,250 C370,240 395,248 400,245 L400,400 L0,400 Z"); }
+      }
+      @keyframes scooterBounce {
+        0%,100% { transform: translateY(0px) rotate(-2deg); }
+        50%     { transform: translateY(-6px) rotate(2deg); }
+      }
+      @keyframes foam {
+        0%,100% { opacity: 0.6; transform: scaleX(1); }
+        50%     { opacity: 1;   transform: scaleX(1.08); }
+      }
+      @keyframes sunPulse {
+        0%,100% { opacity: 0.9; r: 32px; }
+        50%     { opacity: 1;   r: 35px; }
+      }
+      @keyframes cloudDrift {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(30px); }
+      }
+    </style>
+
+    <!-- Sky gradient -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#BAE6FD"/>
+      <stop offset="100%" stop-color="#F5F3EE"/>
+    </linearGradient>
+    <!-- Deep ocean -->
+    <linearGradient id="ocean" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#0EA5E9"/>
+      <stop offset="100%" stop-color="#0369A1"/>
+    </linearGradient>
+    <!-- Mid wave -->
+    <linearGradient id="midWave" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="400" height="400" fill="url(#sky)"/>
+
+  <!-- Sun -->
+  <circle cx="330" cy="70" r="32" fill="#FCD34D" opacity="0.9">
+    <animate attributeName="r" values="32;35;32" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- Sun rays -->
+  <g opacity="0.4" transform="translate(330,70)">
+    <line x1="0" y1="-45" x2="0" y2="-38" stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+    <line x1="0" y1="38"  x2="0" y2="45"  stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-45" y1="0" x2="-38" y2="0" stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+    <line x1="38"  y1="0" x2="45"  y2="0" stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-32" y1="-32" x2="-27" y2="-27" stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+    <line x1="27"  y1="-27" x2="32" y2="-32" stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+    <line x1="-32" y1="32"  x2="-27" y2="27" stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+    <line x1="27"  y1="27"  x2="32" y2="32"  stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Clouds -->
+  <g opacity="0.8" style="animation: cloudDrift 8s ease-in-out infinite alternate;">
+    <ellipse cx="80"  cy="60" rx="35" ry="14" fill="white"/>
+    <ellipse cx="60"  cy="65" rx="22" ry="11" fill="white"/>
+    <ellipse cx="105" cy="65" rx="22" ry="11" fill="white"/>
+  </g>
+  <g opacity="0.6" style="animation: cloudDrift 11s ease-in-out infinite alternate-reverse;">
+    <ellipse cx="200" cy="45" rx="28" ry="11" fill="white"/>
+    <ellipse cx="183" cy="49" rx="18" ry="9"  fill="white"/>
+    <ellipse cx="220" cy="49" rx="18" ry="9"  fill="white"/>
+  </g>
+
+  <!-- Back wave (darker) -->
+  <path d="M0,250 C80,230 120,265 180,250 C240,235 280,265 340,250 C370,240 395,248 400,245 L400,400 L0,400 Z"
+        fill="url(#ocean)" style="animation: wave2 3.5s ease-in-out infinite;"/>
+
+  <!-- Front wave (lighter) -->
+  <path d="M0,220 C60,190 100,240 160,220 C220,200 260,240 320,220 C360,205 390,215 400,210 L400,400 L0,400 Z"
+        fill="url(#midWave)" style="animation: wave1 2.8s ease-in-out infinite;"/>
+
+  <!-- Foam on wave crest -->
+  <ellipse cx="200" cy="218" rx="90" ry="6" fill="white" opacity="0.7"
+           style="animation: foam 2.8s ease-in-out infinite;"/>
+  <ellipse cx="80"  cy="222" rx="40" ry="4" fill="white" opacity="0.5"
+           style="animation: foam 3.1s ease-in-out infinite;"/>
+  <ellipse cx="340" cy="215" rx="40" ry="4" fill="white" opacity="0.5"
+           style="animation: foam 2.5s ease-in-out infinite;"/>
+
+  <!-- Scooter group (riding the wave) -->
+  <g style="animation: scooterBounce 1.4s ease-in-out infinite; transform-origin: 200px 208px;">
+    <!-- Body -->
+    <ellipse cx="200" cy="210" rx="42" ry="14" fill="#FF6B35" rx="8"/>
+    <!-- Windshield -->
+    <path d="M184,200 Q192,188 206,190 L210,200 Z" fill="#BAE6FD" opacity="0.85"/>
+    <!-- Seat -->
+    <ellipse cx="215" cy="197" rx="12" ry="5" fill="#EA4C0A"/>
+    <!-- Wheels -->
+    <circle cx="170" cy="218" r="10" fill="#1E293B"/>
+    <circle cx="170" cy="218" r="5"  fill="#94A3B8"/>
+    <circle cx="230" cy="218" r="10" fill="#1E293B"/>
+    <circle cx="230" cy="218" r="5"  fill="#94A3B8"/>
+    <!-- Handlebar -->
+    <line x1="185" y1="200" x2="178" y2="196" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+    <line x1="178" y1="196" x2="174" y2="198" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+    <!-- Delivery box -->
+    <rect x="218" y="190" width="26" height="20" rx="3" fill="#0EA5E9"/>
+    <text x="231" y="204" font-family="Arial" font-size="10" fill="white" text-anchor="middle" font-weight="bold">Y</text>
+    <!-- Rider helmet -->
+    <circle cx="195" cy="194" r="10" fill="#1E293B"/>
+    <ellipse cx="195" cy="199" rx="8" ry="4" fill="#334155"/>
+    <!-- Speed lines -->
+    <line x1="138" y1="205" x2="152" y2="205" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+    <line x1="133" y1="211" x2="150" y2="211" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <line x1="136" y1="217" x2="151" y2="217" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+  </g>
+
+  <!-- Water bottom -->
+  <rect x="0" y="340" width="400" height="60" fill="#0369A1"/>
+
+  <!-- Yalla Venao branding -->
+  <text x="200" y="378" font-family="Georgia,serif" font-size="15" fill="white"
+        text-anchor="middle" opacity="0.9" letter-spacing="2">YALLA VENAO</text>
+</svg>

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { activeOrder } from '../../data/mockData'
+import { activeOrder } from '../../data/dataAdapter'
 
 const steps = [
   { label: 'Order confirmed', done: true },
@@ -42,7 +42,7 @@ export default function TrackOrderPage() {
             <p className="text-white text-4xl font-extrabold tracking-tight">~{order.eta}</p>
           </div>
           <div className="text-right">
-            <p className="text-white/70 text-xs">Carlos M.</p>
+            <p className="text-white/70 text-xs">Miguel R.</p>
             <p className="text-white/70 text-xs mt-0.5">1.2 km away</p>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function TrackOrderPage() {
             </div>
           </div>
           <div className="absolute bottom-3 left-3 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold shadow" style={{ background: 'rgba(255,255,255,0.9)', color: '#111827' }}>
-            Carlos · 1.2 km away
+            Miguel · 1.2 km away
           </div>
         </div>
       </div>

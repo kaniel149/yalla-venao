@@ -1,11 +1,41 @@
+import { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import VendorDashboard from './VendorDashboard'
 import VendorOrders from './VendorOrders'
 import VendorMenu from './VendorMenu'
+import VendorOnboarding from './VendorOnboarding'
+
+const STORAGE_KEY = 'yv_vendor_setup'
+
+function isOnboardingComplete(): boolean {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return false
+    const data = JSON.parse(raw)
+    return data.step >= 3
+  } catch {
+    return false
+  }
+}
 
 export default function VendorApp() {
   const navigate = useNavigate()
   const location = useLocation()
+  const [showOnboarding, setShowOnboarding] = useState<boolean>(() => !isOnboardingComplete())
+
+  useEffect(() => {
+    if (!isOnboardingComplete()) {
+      setShowOnboarding(true)
+    }
+  }, [])
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false)
+  }
+
+  if (showOnboarding) {
+    return <VendorOnboarding onComplete={handleOnboardingComplete} />
+  }
 
   const tabs = [
     { label: 'Dashboard', path: '/vendor' },
@@ -23,6 +53,15 @@ export default function VendorApp() {
               <p className="text-white/50 text-[10px] font-semibold uppercase tracking-widest">Vendor Portal</p>
               <h1 className="serif text-white text-xl">Yalla Venao</h1>
             </div>
+            <button
+              onClick={() => {
+                localStorage.removeItem(STORAGE_KEY)
+                setShowOnboarding(true)
+              }}
+              className="text-white/40 text-[10px] hover:text-white/70 transition-colors"
+            >
+              ⚙
+            </button>
           </div>
           <div className="flex">
             {tabs.map(tab => {

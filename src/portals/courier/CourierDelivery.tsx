@@ -6,6 +6,8 @@ export default function CourierDelivery() {
   const [delivered, setDelivered] = useState(false)
   const navigate = useNavigate()
 
+  const step = pickedUp ? 'dropoff' : 'pickup'
+
   if (delivered) {
     return (
       <div className="pb-8 pt-12 px-4 flex flex-col items-center justify-center min-h-[60vh]">
@@ -14,9 +16,9 @@ export default function CourierDelivery() {
             <path d="M20 6L9 17l-5-5"/>
           </svg>
         </div>
-        <h2 className="serif text-2xl text-gray-900 mb-2">Delivered</h2>
+        <h2 className="serif text-2xl text-gray-900 mb-2">Delivered!</h2>
         <p className="text-gray-500 mb-1">You earned <span className="font-bold text-[#FF6B35]">$8.50</span></p>
-        <p className="text-gray-400 text-sm mb-8">Great job, Carlos.</p>
+        <p className="text-gray-400 text-sm mb-8">Great job, Miguel.</p>
         <button
           onClick={() => { setPickedUp(false); setDelivered(false); navigate('/courier') }}
           className="btn-primary px-8"
@@ -50,7 +52,7 @@ export default function CourierDelivery() {
           </div>
           <div className="flex-1">
             <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Pick up from</p>
-            <p className="font-bold text-gray-900">La Lora</p>
+            <p className="font-bold text-gray-900">La Quincha</p>
             <p className="text-[12px] text-gray-400 mt-0.5">Playa Venao Beach Road, km 2</p>
           </div>
           {pickedUp && (
@@ -96,27 +98,37 @@ export default function CourierDelivery() {
         {pickedUp && (
           <button
             onClick={() => setDelivered(true)}
-            className="w-full bg-[#1B4332] text-white font-bold py-3 rounded-xl text-sm transition-all active:scale-95"
+            className="w-full bg-[#1B4332] text-white font-bold py-3 rounded-xl text-sm transition-all active:scale-95 mb-3"
           >
             Confirm delivery
           </button>
         )}
       </div>
 
-      {/* Map placeholder — real photo */}
-      <div className="rounded-2xl overflow-hidden relative h-44">
-        <img
-          src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=80"
-          alt="Map"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full flex items-center gap-2">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1B4332" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      {/* Navigation section — real Google Maps link */}
+      <div className="bg-white rounded-2xl p-4 mb-4 shadow-sm">
+        <p className="text-xs text-gray-500 uppercase font-semibold mb-1 tracking-wide">
+          {step === 'pickup' ? 'Pickup location' : 'Delivery address'}
+        </p>
+        <p className="font-bold text-gray-900 mb-1">
+          {step === 'pickup' ? 'La Quincha Restaurant' : 'Surf Camp Venao — Bungalow 4'}
+        </p>
+        <p className="text-sm text-gray-500 mb-3">
+          {step === 'pickup' ? 'Playa Venao Beach Road, km 2' : 'Surf Camp Venao, Bungalow 4'}
+        </p>
+        <a
+          href={step === 'pickup'
+            ? 'https://maps.google.com/?q=7.4210,-80.1501'
+            : 'https://maps.google.com/?q=7.4215,-80.1503'}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center justify-center gap-2 w-full py-3 bg-[#1B4332] text-white rounded-xl font-bold text-sm transition-all active:scale-95"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
           </svg>
-          <span className="text-xs font-bold text-gray-800">{pickedUp ? '1.2 km · ~6 min' : '0.3 km · ~2 min'}</span>
-        </div>
+          Open in Google Maps
+        </a>
       </div>
     </div>
   )

@@ -7,7 +7,7 @@ import TrackOrderPage from './TrackOrderPage'
 import OrdersPage from './OrdersPage'
 import ExplorePage from './ExplorePage'
 import ProfilePage from './ProfilePage'
-import type { CartItem } from '../../data/mockData'
+import type { CartItem } from '../../data/dataAdapter'
 
 const NavIcon = {
   Home: (active: boolean) => (

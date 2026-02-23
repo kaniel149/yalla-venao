@@ -1,10 +1,21 @@
+import { useState } from 'react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import CourierDashboard from './CourierDashboard'
 import CourierDelivery from './CourierDelivery'
+import CourierOnboarding from './CourierOnboarding'
 
 export default function CourierApp() {
   const navigate = useNavigate()
   const location = useLocation()
+
+  const [setupDone, setSetupDone] = useState<boolean>(() => {
+    return !!localStorage.getItem('yv_courier_setup')
+  })
+
+  // Show onboarding if setup not complete
+  if (!setupDone) {
+    return <CourierOnboarding onComplete={() => setSetupDone(true)} />
+  }
 
   return (
     <div className="min-h-screen bg-[#F5F3EE]">
@@ -18,7 +29,7 @@ export default function CourierApp() {
             </div>
             <div className="text-right">
               <p className="text-white/50 text-[10px] font-medium">Today's earnings</p>
-              <p className="text-white font-bold">$42.00</p>
+              <p className="text-white font-bold">$50.00</p>
             </div>
           </div>
           <div className="flex gap-2">

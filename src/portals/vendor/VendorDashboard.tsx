@@ -28,7 +28,7 @@ export default function VendorDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="serif text-2xl text-gray-900 leading-tight">La Lora</h1>
+          <h1 className="serif text-2xl text-gray-900 leading-tight">La Quincha</h1>
           <p className="text-xs text-gray-400 font-medium mt-0.5">Playa Venao, Panama</p>
         </div>
         <button

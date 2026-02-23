@@ -19,7 +19,7 @@ export default function OrdersPage({ onTrack }: Props) {
       {/* ── Active Order ─────────────────────────────────────────────────── */}
       <div className="card p-4 mb-4" style={{ borderLeft: '4px solid #FF6B35' }}>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="font-bold text-theme-primary">La Lora</span>
+          <span className="font-bold text-theme-primary">La Quincha</span>
           <span className="text-[11px] font-bold px-3 py-1 rounded-full" style={{ background: 'rgba(255,107,53,0.12)', color: '#FF6B35' }}>
             On the way
           </span>

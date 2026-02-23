@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import confetti from 'canvas-confetti'
-import type { CartItem } from '../../data/mockData'
-import { businesses } from '../../data/mockData'
+import type { CartItem } from '../../data/dataAdapter'
+import { businesses } from '../../data/dataAdapter'
 
 interface Props {
   cart: CartItem[]
@@ -99,6 +99,7 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
       currentLocation,
       total
     )
+    setPlaced(true)
     window.open(link, '_blank')
     fireConfetti()
     setTimeout(() => {

@@ -6,11 +6,11 @@ const kpis = [
 ]
 
 const recentOrders = [
-  { id: 'ord-067', customer: 'Alex B.', business: 'La Lora', amount: '$27', status: 'delivered' },
+  { id: 'ord-067', customer: 'Alex B.', business: 'La Quincha', amount: '$27', status: 'delivered' },
   { id: 'ord-066', customer: 'Maria S.', business: 'Surf Shack Bar', amount: '$14', status: 'active' },
   { id: 'ord-065', customer: 'Jake T.', business: 'Minisuper Venao', amount: '$36', status: 'active' },
   { id: 'ord-064', customer: 'Chloe R.', business: 'Venao Wellness', amount: '$65', status: 'pending' },
-  { id: 'ord-063', customer: 'Diego M.', business: 'La Lora', amount: '$40', status: 'delivered' },
+  { id: 'ord-063', customer: 'Diego M.', business: 'La Quincha', amount: '$40', status: 'delivered' },
 ]
 
 const statusColor: Record<string, string> = {

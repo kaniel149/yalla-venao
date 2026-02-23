@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { businesses, categories } from '../../data/mockData'
+import { businesses, categories } from '../../data/dataAdapter'
 
 interface Props {
   onBusinessClick: (id: string) => void
