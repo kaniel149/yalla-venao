@@ -4,7 +4,7 @@
  */
 import { isSupabaseConfigured } from '../lib/supabase'
 import { businesses as mockBusinesses, categories as mockCategories, activeOrder as mockActiveOrder } from './mockData'
-import type { Business, CartItem } from './mockData'
+import type { Business } from './mockData'
 import {
   useBusinesses as useSupabaseBusinesses,
   useBusiness as useSupabaseBusiness,

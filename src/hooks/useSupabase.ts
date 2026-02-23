@@ -108,7 +108,7 @@ export function useBusinesses() {
   useEffect(() => {
     if (!supabase) { setLoading(false); return }
 
-    supabase
+    supabase!
       .from('businesses')
       .select('*, menu_items(*)')
       .eq('is_active', true)
@@ -129,7 +129,7 @@ export function useBusiness(id: string) {
   useEffect(() => {
     if (!supabase || !id) { setLoading(false); return }
 
-    supabase
+    supabase!
       .from('businesses')
       .select('*, menu_items(*)')
       .eq('id', id)
@@ -194,7 +194,7 @@ export function useMyOrders() {
 
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) { setLoading(false); return }
-      supabase
+      supabase!
         .from('orders')
         .select('*, businesses(name, image)')
         .eq('customer_id', user.id)
@@ -218,7 +218,7 @@ export function useVendorOrders(businessId: string) {
     if (!supabase || !businessId) { setLoading(false); return }
 
     // Initial fetch
-    supabase
+    supabase!
       .from('orders')
       .select('*')
       .eq('business_id', businessId)
@@ -245,7 +245,7 @@ export function useVendorOrders(businessId: string) {
       })
       .subscribe()
 
-    return () => { supabase.removeChannel(channel) }
+    return () => { supabase!.removeChannel(channel) }
   }, [businessId])
 
   return { orders, loading }
@@ -261,7 +261,7 @@ export function useCourierOrders() {
 
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) { setLoading(false); return }
-      supabase
+      supabase!
         .from('orders')
         .select('*, businesses(name, image, lat, lng)')
         .eq('courier_id', user.id)
