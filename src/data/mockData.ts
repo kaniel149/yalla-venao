@@ -92,10 +92,82 @@ export const businesses: Business[] = [
     hours: { open: 7, close: 21 },
     coordinates: { lat: 7.4213, lng: -80.1499 },
     products: [
-      { id: 'col1', name: 'Hummus Plate', price: 9, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: 'House hummus, roasted garlic, olive oil, fresh pita. Simple and perfect.' },
-      { id: 'col2', name: 'Pad Thai', price: 13, image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80', description: 'Wok rice noodles, tofu or shrimp, tamarind, peanuts, lime. Vegetarian available.' },
-      { id: 'col3', name: 'Lamb Kebab Plate', price: 15, image: 'https://images.unsplash.com/photo-1544025162-d76538823936?w=400&q=80', description: 'Grilled lamb and chicken kebabs, tzatziki, pita, fattoush salad.' },
-      { id: 'col4', name: 'Cold Brew', price: 4, image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80', description: 'Local Chiriquí beans, 18-hour cold brew. Worth waking up for.' },
+      // Appetizers
+      { id: 'col1', name: 'Hummus', price: 7, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: 'Ritual para la paz mundial. A ritual for world peace.' },
+      { id: 'col2', name: 'Berenjenas al Fuego', price: 7, image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&q=80', description: 'Smoked eggplant, embraced with tahini and pico de gallo.' },
+      { id: 'col3', name: 'Coliflor Jagiga', price: 8, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80', description: 'Cauliflower with beetroot tahini, grated tomato, garlic and lemon.' },
+      { id: 'col4', name: 'Kebabones', price: 8, image: 'https://images.unsplash.com/photo-1544025162-d76538823936?w=400&q=80', description: 'Angus beef with secret blend of spices from grandma from Iraq, on cinnamon sticks.' },
+      { id: 'col5', name: 'Arais (Tuna or Meat)', price: 8, image: 'https://images.unsplash.com/photo-1561651188-d207bbec4ec3?w=400&q=80', description: 'Addictive grilled pita with a touch of amba sauce.' },
+      // Asian
+      { id: 'col6', name: 'Pad Thai', price: 12, image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80', description: 'Stir-fried Thai-style rice noodles, peanuts, chives. Vegan option available.' },
+      { id: 'col7', name: 'Malasia', price: 11, image: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&q=80', description: 'Homemade green curry, coconut milk, peanuts. Served with rice or udon noodles.' },
+      { id: 'col8', name: 'La Filipina Picante', price: 12, image: 'https://images.unsplash.com/photo-1569058242567-93de6f36f8e6?w=400&q=80', description: 'Red curry, coconut milk, peanuts. Spicy. Very spicy. With jasmine rice.' },
+      { id: 'col9', name: 'Sachuan', price: 11, image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&q=80', description: 'Eggplant sautéed in soy sauce and rum, bok choi, mushrooms on jasmine rice.' },
+      { id: 'col10', name: 'Curry Love', price: 12, image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&q=80', description: 'Vegetables in coconut milk curry, served with jasmine rice. Vegan option.' },
+      // Mediterranean
+      { id: 'col11', name: 'Hummus Completo', price: 10, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: 'Hummus with chickpeas, boiled egg, tahini, spicy sauce, veggie sticks.' },
+      { id: 'col12', name: 'Falafel Plate', price: 11, image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf04?w=400&q=80', description: '5 falafel balls, hummus, tahini, and Israeli salad.' },
+      { id: 'col13', name: 'Pargit', price: 12, image: 'https://images.unsplash.com/photo-1532636875-6be04a4be559?w=400&q=80', description: 'Grilled chicken skewer with Mediterranean spices, hummus and Israeli salad.' },
+      { id: 'col14', name: 'Kebab', price: 13, image: 'https://images.unsplash.com/photo-1544025162-d76538823936?w=400&q=80', description: 'Angus beef with lamb fat, spices from Iraq, hummus and Israeli salad.' },
+      { id: 'col15', name: 'Sabih', price: 11, image: 'https://images.unsplash.com/photo-1547516508-a5760c021f29?w=400&q=80', description: 'The master sabih: boiled egg, potato, fried eggplant, hummus and Israeli salad.' },
+      // Pitas
+      { id: 'col16', name: 'Falafel Pita', price: 9, image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf04?w=400&q=80', description: 'Pita stuffed with falafel, hummus, tomato, cucumber, pickled onion with sumac.' },
+      { id: 'col17', name: 'Kebab Pita', price: 12, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: 'Pita stuffed with meat kebab, hummus, tomato, cucumber, pickled onion.' },
+      // Drinks & Desserts
+      { id: 'col18', name: 'Malabi', price: 5, image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&q=80', description: 'Rose water milk pudding with pistachios.' },
+      { id: 'col19', name: 'Cerveza Nacional', price: 3, image: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80', description: 'Cold national beer.' },
+    ]
+  },
+
+  {
+    id: 'micaela',
+    name: 'Micaela',
+    category: 'food',
+    vertical: 'food',
+    image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
+    rating: 4.9,
+    reviews: 85,
+    deliveryTime: '25–40',
+    deliveryFee: 3,
+    minOrder: 12,
+    tags: ['Mediterranean', 'Italian', 'Fine Dining', 'Breakfast'],
+    description: 'Italian-Latin-Mediterranean cuisine. Stone oven bread, fresh pastas, breakfast until noon, and seafood. The finest restaurant in Venao.',
+    phone: '',
+    hours: { open: 7, close: 22 },
+    coordinates: { lat: 7.4215, lng: -80.1502 },
+    products: [
+      // Breakfast
+      { id: 'mic1', name: 'Easy Morning', price: 9, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&q=80', description: 'Omelet served with salad and seed bread.' },
+      { id: 'mic2', name: 'Shakshuka', price: 12, image: 'https://images.unsplash.com/photo-1530469912745-a215c6b256ea?w=400&q=80', description: 'Two eggs in Mediterranean tomato sauce, with bread, salad, and tahini.' },
+      { id: 'mic3', name: 'Santeño', price: 14, image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&q=80', description: 'Three eggs with hojaldra, American cheese, and beef fillet sautéed with onions.' },
+      { id: 'mic4', name: "Micaela's Breakfast", price: 16, image: 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=400&q=80', description: 'Three eggs, veggie salad, tuna, tahini, feta, labneh, hummus, bread. Coffee or juice included.' },
+      { id: 'mic5', name: 'Cured Salmon Bruschetta', price: 12, image: 'https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=400&q=80', description: 'Crispy bruschetta with cured salmon, lemon cream, arugula, red onion.' },
+      // Smoothie Bowls
+      { id: 'mic6', name: 'Smoothie Bowl', price: 10, image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&q=80', description: 'Banana and berries smoothie bowl with homemade granola and fresh fruits.' },
+      { id: 'mic7', name: 'Papaya Boat', price: 9, image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=400&q=80', description: 'Halved papaya filled with seasonal fruits, passion fruit and granola.' },
+      // Sandwiches
+      { id: 'mic8', name: 'Micaela Tuna Sandwich', price: 12, image: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?w=400&q=80', description: "Jerusalem bagel with harissa aioli, tuna salad, tomato, cucumber, za'atar." },
+      { id: 'mic9', name: 'Frena Schnitzel', price: 14, image: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80', description: 'Fresh Moroccan bread, breaded chicken, pomodoro, tomato, lettuce. With fries.' },
+      // Starters
+      { id: 'mic10', name: 'Passion Fruit Ceviche', price: 12, image: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=400&q=80', description: 'Catch of the day with celery, cilantro, white onion, jalapeño.' },
+      { id: 'mic11', name: 'Garlic Shrimp', price: 14, image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=400&q=80', description: 'Classic Panamanian shrimp in garlic butter, parsley, bell peppers, with bread.' },
+      { id: 'mic12', name: 'Tuna Tataki', price: 14, image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400&q=80', description: '"New York Windows" — seared tuna with scallions, soy-yuzu sauce, sesame oil.' },
+      { id: 'mic13', name: 'Labneh', price: 11, image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80', description: 'Creamy labneh cheese with house bread, confit cherry tomatoes and garlic.' },
+      // Mains
+      { id: 'mic14', name: 'Musakhan Druzo', price: 14, image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&q=80', description: 'Chicken with Mediterranean spices, caramelized onions, on Arabic bread.' },
+      { id: 'mic15', name: 'Tuna in Coconut', price: 21, image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&q=80', description: 'Tuna tataki with coconut crust on pumpkin cream, with jasmine rice.' },
+      { id: 'mic16', name: 'Filet Mignon Medallions', price: 22, image: 'https://images.unsplash.com/photo-1558030006-450675393462?w=400&q=80', description: 'Filet mignon in aromatic garlic and herb butter, with mashed potatoes.' },
+      { id: 'mic17', name: 'Hamburger', price: 15, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80', description: 'Lettuce, tomato, raw and caramelized onions, with French fries.' },
+      { id: 'mic18', name: 'Schnitzel', price: 14, image: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80', description: 'Breaded chicken breast with two sides (rice, purée, salad, or fries).' },
+      // Pizza
+      { id: 'mic19', name: 'Pizza Margarita', price: 10, image: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=400&q=80', description: 'Classic margherita pizza from the stone oven.' },
+      { id: 'mic20', name: 'Pizza Pepperoni', price: 12, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80', description: 'Pepperoni pizza from the stone oven.' },
+      // Pasta
+      { id: 'mic21', name: 'Pasta Boloñesa', price: 14, image: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&q=80', description: 'Classic bolognese pasta.' },
+      { id: 'mic22', name: 'Pasta Truffle', price: 15, image: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=400&q=80', description: 'Truffle pasta. With filet mignon: $24.' },
+      // Drinks
+      { id: 'mic23', name: 'Cappuccino', price: 3.50, image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80', description: 'Fresh cappuccino.' },
+      { id: 'mic24', name: 'Tiramisú', price: 8, image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&q=80', description: 'Homemade tiramisú.' },
     ]
   },
 
