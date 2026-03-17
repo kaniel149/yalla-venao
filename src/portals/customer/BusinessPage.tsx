@@ -277,8 +277,12 @@ export default function BusinessPage({ cart, addToCart, onViewCart }: Props) {
   const cartTotal = cartItems.reduce((s, c) => s + c.product.price * c.qty, 0)
   const cartCount = cartItems.reduce((s, c) => s + c.qty, 0)
 
+  const [addedId, setAddedId] = useState<string | null>(null)
+
   const handleAdd = (product: Product) => {
     addToCart({ product, qty: 1, businessId: biz.id })
+    setAddedId(product.id)
+    setTimeout(() => setAddedId(null), 800)
   }
 
   return (
@@ -440,14 +444,21 @@ export default function BusinessPage({ cart, addToCart, onViewCart }: Props) {
                     <div className="flex items-center justify-between mt-2">
                       <span className="font-extrabold text-gray-900 text-[15px]">${product.price}</span>
                       <button
-                        onClick={() => handleAdd(product)}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-all shadow-sm
-                          ${cartItem
-                            ? 'bg-[#1B4332] text-white'
-                            : 'bg-[#FF6B35] text-white hover:bg-[#E85520] active:scale-90'
+                        onClick={(e) => { e.stopPropagation(); handleAdd(product); }}
+                        className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg shadow-sm
+                          transition-all duration-200
+                          ${addedId === product.id
+                            ? 'bg-green-500 text-white scale-110'
+                            : cartItem
+                              ? 'bg-[#1B4332] text-white active:scale-90'
+                              : 'bg-[#FF6B35] text-white hover:bg-[#E85520] active:scale-90'
                           }`}
                       >
-                        {cartItem ? cartItem.qty : (
+                        {addedId === product.id ? (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M5 13l4 4L19 7" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        ) : cartItem ? cartItem.qty : (
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                             <line x1="12" y1="5" x2="12" y2="19" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
                             <line x1="5" y1="12" x2="19" y2="12" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
@@ -471,7 +482,7 @@ export default function BusinessPage({ cart, addToCart, onViewCart }: Props) {
             className="w-full bg-[#FF6B35] text-white font-bold py-4 rounded-2xl flex items-center justify-between px-5 shadow-xl hover:bg-[#E85520] active:scale-95 transition-all"
           >
             <span className="bg-white/20 rounded-lg px-2.5 py-0.5 text-sm font-bold tabular-nums">{cartCount}</span>
-            <span className="text-[15px]">View Cart</span>
+            <span className="text-[15px]">View Cart →</span>
             <span className="font-bold text-[15px]">${cartTotal.toFixed(0)}</span>
           </button>
         </div>
