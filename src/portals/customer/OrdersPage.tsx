@@ -28,7 +28,7 @@ export default function OrdersPage({ onTrack }: Props) {
   const [orders, setOrders] = useState<StoredOrder[]>([])
 
   useEffect(() => {
-    setOrders(orderStore.getAll())
+    orderStore.getAll().then(setOrders)
   }, [])
 
   const activeOrders = orders.filter(o => !['delivered', 'cancelled'].includes(o.status))

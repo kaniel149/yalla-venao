@@ -82,9 +82,9 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
       ? customLocation.trim()
       : BEACH_LOCATIONS.find(l => l.id === selectedLocation)?.label ?? ''
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (cart.length === 0 || !deliveryReady || !biz) return
-    orderStore.add({
+    await orderStore.add({
       businessId: biz.id,
       businessName: biz.name,
       customerName: 'Walk-in',
@@ -104,7 +104,7 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
     }, 1800)
   }
 
-  const handleWhatsAppOrder = () => {
+  const handleWhatsAppOrder = async () => {
     if (cart.length === 0 || !deliveryReady || !biz?.phone) return
     const link = buildWhatsAppLink(
       { name: biz.name, phone: biz.phone },
@@ -112,7 +112,7 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
       currentLocation,
       total
     )
-    orderStore.add({
+    await orderStore.add({
       businessId: biz.id,
       businessName: biz.name,
       customerName: 'WhatsApp',

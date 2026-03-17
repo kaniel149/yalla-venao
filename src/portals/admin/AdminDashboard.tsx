@@ -13,11 +13,15 @@ const statusColor: Record<string, string> = {
 
 export default function AdminDashboard() {
   const [orders, setOrders] = useState<StoredOrder[]>([])
-  const [stats, setStats] = useState(orderStore.getStats())
+  const [stats, setStats] = useState({ totalOrders: 0, totalRevenue: 0, totalDeliveryFees: 0, byBusiness: [] as { businessId: string; name: string; count: number; revenue: number }[] })
 
   useEffect(() => {
-    setOrders(orderStore.getAll())
-    setStats(orderStore.getStats())
+    const load = async () => {
+      const [allOrders, allStats] = await Promise.all([orderStore.getAll(), orderStore.getStats()])
+      setOrders(allOrders)
+      setStats(allStats)
+    }
+    load()
   }, [])
 
   const todayOrders = orders.filter(o => {

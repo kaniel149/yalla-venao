@@ -1,4 +1,7 @@
 // src/lib/orderStore.ts
+// Supabase-first with localStorage fallback
+
+import { supabase, isSupabaseConfigured } from './supabase'
 
 export interface StoredOrder {
   id: string
@@ -16,9 +19,45 @@ export interface StoredOrder {
   channel: 'app' | 'whatsapp'
 }
 
+// ─── DB row ↔ App type mapping ─────────────────────────────────────────────
+interface DbRow {
+  id: string
+  business_id: string
+  business_name: string
+  customer_name: string
+  items: { name: string; qty: number; price: number }[]
+  subtotal: number
+  delivery_fee: number
+  tip: number
+  total: number
+  delivery_location: string
+  status: string
+  channel: string
+  created_at: string
+}
+
+function rowToOrder(r: DbRow): StoredOrder {
+  return {
+    id: r.id,
+    businessId: r.business_id,
+    businessName: r.business_name,
+    customerName: r.customer_name,
+    items: r.items,
+    subtotal: Number(r.subtotal),
+    deliveryFee: Number(r.delivery_fee),
+    tip: Number(r.tip),
+    total: Number(r.total),
+    deliveryLocation: r.delivery_location,
+    status: r.status as StoredOrder['status'],
+    createdAt: r.created_at,
+    channel: r.channel as StoredOrder['channel'],
+  }
+}
+
+// ─── localStorage fallback ─────────────────────────────────────────────────
 const STORAGE_KEY = 'yv_orders'
 
-function getAll(): StoredOrder[] {
+function localGetAll(): StoredOrder[] {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
   } catch {
@@ -26,42 +65,89 @@ function getAll(): StoredOrder[] {
   }
 }
 
-function save(orders: StoredOrder[]) {
+function localSave(orders: StoredOrder[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(orders))
 }
 
+// ─── Public API ────────────────────────────────────────────────────────────
 export const orderStore = {
-  getAll,
+  async getAll(): Promise<StoredOrder[]> {
+    if (!isSupabaseConfigured || !supabase) return localGetAll()
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false })
+    if (error) { console.error('orderStore.getAll:', error); return localGetAll() }
+    return (data as DbRow[]).map(rowToOrder)
+  },
 
-  add(order: Omit<StoredOrder, 'id' | 'createdAt' | 'status'>): StoredOrder {
-    const newOrder: StoredOrder = {
-      ...order,
-      id: `ord-${Date.now().toString(36)}`,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
+  async add(order: Omit<StoredOrder, 'id' | 'createdAt' | 'status'>): Promise<StoredOrder> {
+    if (!isSupabaseConfigured || !supabase) {
+      const newOrder: StoredOrder = {
+        ...order,
+        id: `ord-${Date.now().toString(36)}`,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      }
+      const all = localGetAll()
+      all.unshift(newOrder)
+      localSave(all)
+      return newOrder
     }
-    const all = getAll()
-    all.unshift(newOrder)
-    save(all)
-    return newOrder
+    const { data, error } = await supabase
+      .from('orders')
+      .insert({
+        business_id: order.businessId,
+        business_name: order.businessName,
+        customer_name: order.customerName,
+        items: order.items,
+        subtotal: order.subtotal,
+        delivery_fee: order.deliveryFee,
+        tip: order.tip,
+        total: order.total,
+        delivery_location: order.deliveryLocation,
+        channel: order.channel,
+      })
+      .select()
+      .single()
+    if (error) { console.error('orderStore.add:', error); throw error }
+    return rowToOrder(data as DbRow)
   },
 
-  updateStatus(id: string, status: StoredOrder['status']) {
-    const all = getAll()
-    const idx = all.findIndex(o => o.id === id)
-    if (idx !== -1) {
-      all[idx].status = status
-      save(all)
+  async updateStatus(id: string, status: StoredOrder['status']): Promise<void> {
+    if (!isSupabaseConfigured || !supabase) {
+      const all = localGetAll()
+      const idx = all.findIndex(o => o.id === id)
+      if (idx !== -1) { all[idx].status = status; localSave(all) }
+      return
     }
+    const { error } = await supabase
+      .from('orders')
+      .update({ status })
+      .eq('id', id)
+    if (error) console.error('orderStore.updateStatus:', error)
   },
 
-  getByBusiness(businessId: string): StoredOrder[] {
-    return getAll().filter(o => o.businessId === businessId)
+  async getByBusiness(businessId: string): Promise<StoredOrder[]> {
+    if (!isSupabaseConfigured || !supabase) {
+      return localGetAll().filter(o => o.businessId === businessId)
+    }
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('business_id', businessId)
+      .order('created_at', { ascending: false })
+    if (error) { console.error('orderStore.getByBusiness:', error); return [] }
+    return (data as DbRow[]).map(rowToOrder)
   },
 
-  /** Stats for admin: per-business delivery breakdown */
-  getStats() {
-    const all = getAll()
+  async getStats(): Promise<{
+    totalOrders: number
+    totalRevenue: number
+    totalDeliveryFees: number
+    byBusiness: { businessId: string; name: string; count: number; revenue: number }[]
+  }> {
+    const all = await this.getAll()
     const byBusiness: Record<string, { name: string; count: number; revenue: number }> = {}
     for (const o of all) {
       if (!byBusiness[o.businessId]) {

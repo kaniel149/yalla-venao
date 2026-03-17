@@ -22,18 +22,18 @@ export default function VendorDashboard() {
   const businessId = getVendorBusinessId()
 
   // Refresh from store
-  const refresh = () => {
+  const refresh = async () => {
     if (!businessId) {
-      setOrders(orderStore.getAll())
+      setOrders(await orderStore.getAll())
     } else {
-      setOrders(orderStore.getByBusiness(businessId))
+      setOrders(await orderStore.getByBusiness(businessId))
     }
   }
 
   useEffect(() => { refresh() }, [])
 
-  const updateStatus = (id: string, status: StoredOrder['status']) => {
-    orderStore.updateStatus(id, status)
+  const updateStatus = async (id: string, status: StoredOrder['status']) => {
+    await orderStore.updateStatus(id, status)
     refresh()
   }
 

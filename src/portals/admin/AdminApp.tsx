@@ -96,12 +96,12 @@ function AdminOrdersPage() {
   const [orders, setOrders] = useState<StoredOrder[]>([])
 
   useEffect(() => {
-    setOrders(orderStore.getAll())
+    orderStore.getAll().then(setOrders)
   }, [])
 
-  const updateStatus = (id: string, status: StoredOrder['status']) => {
-    orderStore.updateStatus(id, status)
-    setOrders(orderStore.getAll())
+  const updateStatus = async (id: string, status: StoredOrder['status']) => {
+    await orderStore.updateStatus(id, status)
+    setOrders(await orderStore.getAll())
   }
 
   const statusColor: Record<string, string> = {
