@@ -17,6 +17,9 @@ export interface StoredOrder {
   status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'picked_up' | 'delivered' | 'cancelled'
   createdAt: string   // ISO string
   channel: 'app' | 'whatsapp'
+  courierName: string
+  courierLat: number | null
+  courierLng: number | null
 }
 
 // ─── DB row ↔ App type mapping ─────────────────────────────────────────────
@@ -34,6 +37,9 @@ interface DbRow {
   status: string
   channel: string
   created_at: string
+  courier_name: string
+  courier_lat: number | null
+  courier_lng: number | null
 }
 
 function rowToOrder(r: DbRow): StoredOrder {
@@ -51,6 +57,9 @@ function rowToOrder(r: DbRow): StoredOrder {
     status: r.status as StoredOrder['status'],
     createdAt: r.created_at,
     channel: r.channel as StoredOrder['channel'],
+    courierName: r.courier_name || '',
+    courierLat: r.courier_lat,
+    courierLng: r.courier_lng,
   }
 }
 
@@ -88,6 +97,9 @@ export const orderStore = {
         id: `ord-${Date.now().toString(36)}`,
         status: 'pending',
         createdAt: new Date().toISOString(),
+        courierName: '',
+        courierLat: null,
+        courierLng: null,
       }
       const all = localGetAll()
       all.unshift(newOrder)
@@ -138,6 +150,77 @@ export const orderStore = {
       .eq('business_id', businessId)
       .order('created_at', { ascending: false })
     if (error) { console.error('orderStore.getByBusiness:', error); return [] }
+    return (data as DbRow[]).map(rowToOrder)
+  },
+
+  /** Get orders with status 'ready' — available for courier pickup */
+  async getReady(): Promise<StoredOrder[]> {
+    if (!isSupabaseConfigured || !supabase) {
+      return localGetAll().filter(o => o.status === 'ready')
+    }
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('status', 'ready')
+      .order('created_at', { ascending: false })
+    if (error) { console.error('orderStore.getReady:', error); return [] }
+    return (data as DbRow[]).map(rowToOrder)
+  },
+
+  /** Courier accepts an order — set status to picked_up + courier name */
+  async assignCourier(id: string, courierName: string): Promise<void> {
+    if (!isSupabaseConfigured || !supabase) {
+      const all = localGetAll()
+      const idx = all.findIndex(o => o.id === id)
+      if (idx !== -1) {
+        all[idx].status = 'picked_up'
+        all[idx].courierName = courierName
+        localSave(all)
+      }
+      return
+    }
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: 'picked_up', courier_name: courierName })
+      .eq('id', id)
+    if (error) console.error('orderStore.assignCourier:', error)
+  },
+
+  /** Update courier GPS position on an active delivery */
+  async updateCourierLocation(id: string, lat: number, lng: number): Promise<void> {
+    if (!isSupabaseConfigured || !supabase) return
+    const { error } = await supabase
+      .from('orders')
+      .update({ courier_lat: lat, courier_lng: lng })
+      .eq('id', id)
+    if (error) console.error('orderStore.updateCourierLocation:', error)
+  },
+
+  /** Get a single order by ID */
+  async getById(id: string): Promise<StoredOrder | null> {
+    if (!isSupabaseConfigured || !supabase) {
+      return localGetAll().find(o => o.id === id) || null
+    }
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', id)
+      .single()
+    if (error) { console.error('orderStore.getById:', error); return null }
+    return rowToOrder(data as DbRow)
+  },
+
+  /** Get orders assigned to a courier */
+  async getByCourier(courierName: string): Promise<StoredOrder[]> {
+    if (!isSupabaseConfigured || !supabase) {
+      return localGetAll().filter(o => o.courierName === courierName)
+    }
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('courier_name', courierName)
+      .order('created_at', { ascending: false })
+    if (error) { console.error('orderStore.getByCourier:', error); return [] }
     return (data as DbRow[]).map(rowToOrder)
   },
 
