@@ -1,34 +1,60 @@
-import { useState } from 'react'
-
-const mockOrders = [
-  { id: 'ord-001', customer: 'Alex B.', items: 'Ceviche de Corvina ×2', total: 27, time: '2 min ago', status: 'pending' },
-  { id: 'ord-002', customer: 'Maria S.', items: 'Tuna Tartare ×1, Patacones ×2', total: 34, time: '8 min ago', status: 'preparing' },
-  { id: 'ord-003', customer: 'Jake T.', items: 'Paella Venao ×1', total: 22, time: '15 min ago', status: 'ready' },
-]
+import { useState, useEffect } from 'react'
+import { orderStore } from '../../lib/orderStore'
+import type { StoredOrder } from '../../lib/orderStore'
 
 type OrderStatus = 'pending' | 'preparing' | 'ready'
 
 const statusConfig = {
-  pending:   { label: 'New',       color: 'bg-blue-500',      dot: 'bg-blue-400'  },
-  preparing: { label: 'Preparing', color: 'bg-[#FF6B35]',     dot: 'bg-orange-400' },
-  ready:     { label: 'Ready',     color: 'bg-[#1B4332]',     dot: 'bg-green-500' },
+  pending:   { label: 'New',       color: 'bg-blue-500',  dot: 'bg-blue-400' },
+  preparing: { label: 'Preparing', color: 'bg-[#FF6B35]', dot: 'bg-orange-400' },
+  ready:     { label: 'Ready',     color: 'bg-[#1B4332]', dot: 'bg-green-500' },
+}
+
+function getVendorBusinessId(): string | null {
+  try {
+    const raw = localStorage.getItem('yv_vendor_setup')
+    if (!raw) return null
+    return JSON.parse(raw).businessId || null
+  } catch { return null }
 }
 
 export default function VendorDashboard() {
   const [isOpen, setIsOpen] = useState(true)
-  const [orders, setOrders] = useState(mockOrders)
+  const [orders, setOrders] = useState<StoredOrder[]>([])
+  const businessId = getVendorBusinessId()
 
-  const updateStatus = (id: string, status: OrderStatus) => {
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o))
+  // Refresh from store
+  const refresh = () => {
+    if (!businessId) {
+      setOrders(orderStore.getAll())
+    } else {
+      setOrders(orderStore.getByBusiness(businessId))
+    }
   }
+
+  useEffect(() => { refresh() }, [])
+
+  const updateStatus = (id: string, status: StoredOrder['status']) => {
+    orderStore.updateStatus(id, status)
+    refresh()
+  }
+
+  const activeOrders = orders.filter(o => !['delivered', 'cancelled'].includes(o.status))
+  const todayOrders = orders.filter(o => {
+    const d = new Date(o.createdAt)
+    const now = new Date()
+    return d.toDateString() === now.toDateString()
+  })
+  const todayRevenue = todayOrders.reduce((s, o) => s + o.total, 0)
+  const totalDeliveries = orders.length
 
   return (
     <div className="pb-8 pt-6 px-4">
-
-      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="serif text-2xl text-gray-900 leading-tight">La Quincha</h1>
+          <h1 className="serif text-2xl text-gray-900 leading-tight">
+            {orders[0]?.businessName || 'Your Business'}
+          </h1>
           <p className="text-xs text-gray-400 font-medium mt-0.5">Playa Venao, Panama</p>
         </div>
         <button
@@ -42,42 +68,57 @@ export default function VendorDashboard() {
         </button>
       </div>
 
-      {/* Stats — clean numbers, no emoji */}
+      {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="bg-white rounded-2xl p-4">
-          <p className="text-2xl font-bold text-gray-900">12</p>
+          <p className="text-2xl font-bold text-gray-900">{todayOrders.length}</p>
           <p className="text-[11px] text-gray-400 mt-0.5 font-medium">Orders today</p>
         </div>
         <div className="bg-white rounded-2xl p-4">
-          <p className="text-2xl font-bold text-gray-900">$340</p>
+          <p className="text-2xl font-bold text-gray-900">${todayRevenue}</p>
           <p className="text-[11px] text-gray-400 mt-0.5 font-medium">Revenue</p>
         </div>
         <div className="bg-white rounded-2xl p-4">
-          <p className="text-2xl font-bold text-gray-900">4.9</p>
-          <p className="text-[11px] text-gray-400 mt-0.5 font-medium">Rating</p>
+          <p className="text-2xl font-bold text-gray-900">{totalDeliveries}</p>
+          <p className="text-[11px] text-gray-400 mt-0.5 font-medium">Total deliveries</p>
         </div>
       </div>
 
-      {/* Orders */}
-      <h2 className="font-bold text-gray-900 text-[15px] mb-3">Live orders</h2>
+      {/* Live orders */}
+      <h2 className="font-bold text-gray-900 text-[15px] mb-3">
+        Live orders {activeOrders.length > 0 && `(${activeOrders.length})`}
+      </h2>
       <div className="space-y-3">
-        {orders.map(order => {
-          const sc = statusConfig[order.status as OrderStatus]
+        {activeOrders.length === 0 && (
+          <div className="text-center py-12 text-gray-400 text-sm">No active orders</div>
+        )}
+        {activeOrders.map(order => {
+          const sc = statusConfig[order.status as keyof typeof statusConfig] || statusConfig.pending
           return (
             <div key={order.id} className="bg-white rounded-2xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-gray-900 text-sm">{order.customer}</span>
+                  <span className="font-semibold text-gray-900 text-sm">{order.customerName}</span>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full text-white ${sc.color}`}>
                     {sc.label}
                   </span>
+                  {order.channel === 'whatsapp' && (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700">WA</span>
+                  )}
                 </div>
                 <span className="font-bold text-[#FF6B35] text-sm">${order.total}</span>
               </div>
-              <p className="text-[12px] text-gray-500 mb-3">{order.items}</p>
-              <p className="text-[10px] text-gray-300 mb-3 font-medium">{order.time}</p>
+              <p className="text-[12px] text-gray-500 mb-1">
+                {order.items.map(i => `${i.name} ×${i.qty}`).join(', ')}
+              </p>
+              <p className="text-[10px] text-gray-300 mb-1 font-medium">
+                {order.deliveryLocation} · {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </p>
+              <p className="text-[10px] text-gray-300 mb-3 font-medium">
+                Delivery fee: $5 · #{order.id}
+              </p>
               <div className="flex gap-2">
-                {(['pending', 'preparing', 'ready'] as OrderStatus[]).map(s => (
+                {(['pending', 'preparing', 'ready'] as const).map(s => (
                   <button
                     key={s}
                     onClick={() => updateStatus(order.id, s)}
@@ -95,6 +136,24 @@ export default function VendorDashboard() {
           )
         })}
       </div>
+
+      {/* Delivery history section */}
+      {orders.filter(o => o.status === 'delivered').length > 0 && (
+        <>
+          <h2 className="font-bold text-gray-900 text-[15px] mb-3 mt-6">Delivery history</h2>
+          <div className="space-y-2">
+            {orders.filter(o => o.status === 'delivered').map(order => (
+              <div key={order.id} className="bg-white rounded-xl p-3 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">{order.customerName}</p>
+                  <p className="text-[11px] text-gray-400">{new Date(order.createdAt).toLocaleDateString()}</p>
+                </div>
+                <span className="font-bold text-gray-900">${order.total}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
