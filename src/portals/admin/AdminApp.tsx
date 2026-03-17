@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import AdminDashboard from './AdminDashboard'
 import AdminBusinesses from './AdminBusinesses'
 import AdminCouriers from './AdminCouriers'
+import AdminLogin from './AdminLogin'
 import { orderStore } from '../../lib/orderStore'
 import type { StoredOrder } from '../../lib/orderStore'
 
@@ -16,6 +17,11 @@ const navItems = [
 export default function AdminApp() {
   const navigate = useNavigate()
   const location = useLocation()
+  const [authed, setAuthed] = useState(() => localStorage.getItem('yv_admin_auth') === 'true')
+
+  if (!authed) {
+    return <AdminLogin onAuth={() => setAuthed(true)} />
+  }
 
   return (
     <div className="min-h-screen bg-[#F5F3EE] flex flex-col">
@@ -34,7 +40,7 @@ export default function AdminApp() {
               <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
             </svg>
           </div>
-          <span className="text-white/60 text-sm hidden sm:block">Admin</span>
+          <button onClick={() => { localStorage.removeItem('yv_admin_auth'); setAuthed(false) }} className="text-white/60 text-sm hidden sm:block hover:text-white/90 transition-colors">Logout</button>
         </div>
       </div>
 
