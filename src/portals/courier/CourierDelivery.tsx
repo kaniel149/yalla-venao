@@ -1,13 +1,120 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { orderStore } from '../../lib/orderStore'
+import type { StoredOrder } from '../../lib/orderStore'
+import { businesses } from '../../data/mockData'
 
 export default function CourierDelivery() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const orderId = new URLSearchParams(location.search).get('id')
+
+  const [order, setOrder] = useState<StoredOrder | null>(null)
+  const [loading, setLoading] = useState(true)
   const [pickedUp, setPickedUp] = useState(false)
   const [delivered, setDelivered] = useState(false)
-  const navigate = useNavigate()
+  const [locationSharing, setLocationSharing] = useState(false)
+  const [watchId, setWatchId] = useState<number | null>(null)
+  const lastLocationUpdateRef = useRef<number>(0)
 
-  const step = pickedUp ? 'dropoff' : 'pickup'
+  // Load order from store
+  useEffect(() => {
+    if (!orderId) { setLoading(false); return }
+    orderStore.getById(orderId).then(found => {
+      setOrder(found)
+      setLoading(false)
+    })
+  }, [orderId])
 
+  // GPS tracking — starts when order is loaded
+  useEffect(() => {
+    if (!order) return
+    if (!navigator.geolocation) return
+
+    const id = navigator.geolocation.watchPosition(
+      (pos) => {
+        setLocationSharing(true)
+        const now = Date.now()
+        if (now - lastLocationUpdateRef.current >= 15_000) {
+          lastLocationUpdateRef.current = now
+          orderStore.updateCourierLocation(
+            order.id,
+            pos.coords.latitude,
+            pos.coords.longitude
+          )
+        }
+      },
+      (err) => {
+        console.warn('Geolocation error:', err)
+        setLocationSharing(false)
+      },
+      { enableHighAccuracy: true, maximumAge: 10_000 }
+    )
+    setWatchId(id)
+
+    return () => {
+      navigator.geolocation.clearWatch(id)
+    }
+  }, [order?.id])
+
+  async function handleConfirmDelivery() {
+    if (!order) return
+    await orderStore.updateStatus(order.id, 'delivered')
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId)
+      setWatchId(null)
+    }
+    setDelivered(true)
+  }
+
+  // ─── No order ID in URL ────────────────────────────────────────────────────
+  if (!orderId) {
+    return (
+      <div className="pb-8 pt-12 px-4 flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-5">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h2 className="font-bold text-gray-900 text-lg mb-1">No active delivery</h2>
+        <p className="text-sm text-gray-400 mb-6">Accept an order from the dashboard first.</p>
+        <button onClick={() => navigate('/courier')} className="btn-primary px-8">
+          Back to dashboard
+        </button>
+      </div>
+    )
+  }
+
+  // ─── Loading ───────────────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div className="pb-8 pt-12 px-4 flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 border-2 border-[#1B4332] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm text-gray-400">Loading order...</p>
+      </div>
+    )
+  }
+
+  // ─── Order not found ───────────────────────────────────────────────────────
+  if (!order) {
+    return (
+      <div className="pb-8 pt-12 px-4 flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-5">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h2 className="font-bold text-gray-900 text-lg mb-1">Order not found</h2>
+        <p className="text-sm text-gray-400 mb-6">Order #{orderId} could not be loaded.</p>
+        <button onClick={() => navigate('/courier')} className="btn-primary px-8">
+          Back to dashboard
+        </button>
+      </div>
+    )
+  }
+
+  // ─── Success screen ────────────────────────────────────────────────────────
   if (delivered) {
     return (
       <div className="pb-8 pt-12 px-4 flex flex-col items-center justify-center min-h-[60vh]">
@@ -17,10 +124,14 @@ export default function CourierDelivery() {
           </svg>
         </div>
         <h2 className="serif text-2xl text-gray-900 mb-2">Delivered!</h2>
-        <p className="text-gray-500 mb-1">You earned <span className="font-bold text-[#FF6B35]">$8.50</span></p>
-        <p className="text-gray-400 text-sm mb-8">Great job, Miguel.</p>
+        <p className="text-gray-500 mb-1">
+          You earned <span className="font-bold text-[#FF6B35]">${order.deliveryFee.toFixed(2)}</span>
+        </p>
+        <p className="text-gray-400 text-sm mb-8">
+          {order.courierName ? `Great job, ${order.courierName}.` : 'Great job!'}
+        </p>
         <button
-          onClick={() => { setPickedUp(false); setDelivered(false); navigate('/courier') }}
+          onClick={() => navigate('/courier')}
           className="btn-primary px-8"
         >
           Back to dashboard
@@ -29,9 +140,29 @@ export default function CourierDelivery() {
     )
   }
 
+  // ─── Delivery flow ─────────────────────────────────────────────────────────
+
+  // Look up business coordinates from mockData (for Maps link)
+  const biz = businesses.find(b => b.id === order.businessId)
+  const bizCoords = biz?.coordinates
+
+  const pickupMapsUrl = bizCoords
+    ? `https://maps.google.com/?q=${bizCoords.lat},${bizCoords.lng}`
+    : `https://maps.google.com/?q=${encodeURIComponent(order.businessName + ' Playa Venao')}`
+
+  const dropoffMapsUrl = `https://maps.google.com/?q=${encodeURIComponent(order.deliveryLocation + ', Playa Venao')}`
+
+  const step = pickedUp ? 'dropoff' : 'pickup'
+
   return (
     <div className="pb-8 pt-6 px-4">
-      <h2 className="font-bold text-gray-900 text-[17px] mb-5">Active delivery</h2>
+      <h2 className="font-bold text-gray-900 text-[17px] mb-1">Active delivery</h2>
+
+      {/* Location sharing indicator */}
+      <div className={`flex items-center gap-1.5 mb-4 text-[11px] font-medium ${locationSharing ? 'text-green-600' : 'text-gray-400'}`}>
+        <span className={`w-2 h-2 rounded-full ${locationSharing ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`} />
+        {locationSharing ? 'Location sharing active' : 'Requesting location...'}
+      </div>
 
       {/* Progress bar */}
       <div className="flex items-center gap-1 mb-2">
@@ -52,8 +183,12 @@ export default function CourierDelivery() {
           </div>
           <div className="flex-1">
             <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Pick up from</p>
-            <p className="font-bold text-gray-900">La Quincha</p>
-            <p className="text-[12px] text-gray-400 mt-0.5">Playa Venao Beach Road, km 2</p>
+            <p className="font-bold text-gray-900">{order.businessName}</p>
+            {bizCoords && (
+              <p className="text-[12px] text-gray-400 mt-0.5">
+                {bizCoords.lat.toFixed(4)}, {bizCoords.lng.toFixed(4)}
+              </p>
+            )}
           </div>
           {pickedUp && (
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B4332" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -61,10 +196,23 @@ export default function CourierDelivery() {
             </svg>
           )}
         </div>
-        <div className="bg-gray-50 rounded-xl p-3 mb-3">
-          <p className="text-[12px] font-semibold text-gray-700">Ceviche de Corvina ×2</p>
-          <p className="text-[11px] text-gray-400 mt-0.5">$24.00</p>
+
+        {/* Items list */}
+        <div className="bg-gray-50 rounded-xl p-3 mb-3 space-y-1.5">
+          {order.items.map((item, i) => (
+            <div key={i} className="flex justify-between items-center">
+              <p className="text-[12px] font-semibold text-gray-700">
+                {item.name} <span className="text-gray-400 font-normal">x{item.qty}</span>
+              </p>
+              <p className="text-[11px] text-gray-400">${(item.price * item.qty).toFixed(2)}</p>
+            </div>
+          ))}
+          <div className="border-t border-gray-200 pt-1.5 mt-1.5 flex justify-between">
+            <p className="text-[11px] text-gray-400 font-semibold">Total</p>
+            <p className="text-[11px] text-gray-700 font-bold">${order.total.toFixed(2)}</p>
+          </div>
         </div>
+
         {!pickedUp && (
           <button
             onClick={() => setPickedUp(true)}
@@ -85,19 +233,14 @@ export default function CourierDelivery() {
           </div>
           <div className="flex-1">
             <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Drop off at</p>
-            <p className="font-bold text-gray-900">Alex B.</p>
-            <p className="text-[12px] text-gray-400 mt-0.5">Surf Camp Venao, Bungalow 4</p>
+            <p className="font-bold text-gray-900">{order.customerName}</p>
+            <p className="text-[12px] text-gray-400 mt-0.5">{order.deliveryLocation}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-[12px] text-gray-400 mb-3">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.07 6.07l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/>
-          </svg>
-          <span>+507 6123-4567</span>
-        </div>
+
         {pickedUp && (
           <button
-            onClick={() => setDelivered(true)}
+            onClick={handleConfirmDelivery}
             className="w-full bg-[#1B4332] text-white font-bold py-3 rounded-xl text-sm transition-all active:scale-95 mb-3"
           >
             Confirm delivery
@@ -105,21 +248,21 @@ export default function CourierDelivery() {
         )}
       </div>
 
-      {/* Navigation section — real Google Maps link */}
+      {/* Navigation section */}
       <div className="bg-white rounded-2xl p-4 mb-4 shadow-sm">
         <p className="text-xs text-gray-500 uppercase font-semibold mb-1 tracking-wide">
           {step === 'pickup' ? 'Pickup location' : 'Delivery address'}
         </p>
         <p className="font-bold text-gray-900 mb-1">
-          {step === 'pickup' ? 'La Quincha Restaurant' : 'Surf Camp Venao — Bungalow 4'}
+          {step === 'pickup' ? order.businessName : order.customerName}
         </p>
         <p className="text-sm text-gray-500 mb-3">
-          {step === 'pickup' ? 'Playa Venao Beach Road, km 2' : 'Surf Camp Venao, Bungalow 4'}
+          {step === 'pickup'
+            ? (bizCoords ? `${bizCoords.lat.toFixed(4)}, ${bizCoords.lng.toFixed(4)}` : 'Playa Venao')
+            : order.deliveryLocation}
         </p>
         <a
-          href={step === 'pickup'
-            ? 'https://maps.google.com/?q=7.4210,-80.1501'
-            : 'https://maps.google.com/?q=7.4215,-80.1503'}
+          href={step === 'pickup' ? pickupMapsUrl : dropoffMapsUrl}
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center gap-2 w-full py-3 bg-[#1B4332] text-white rounded-xl font-bold text-sm transition-all active:scale-95"

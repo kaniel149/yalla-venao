@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { orderStore } from '../../lib/orderStore'
 import type { StoredOrder } from '../../lib/orderStore'
 
@@ -14,29 +14,116 @@ function CheckIcon() {
   )
 }
 
-const statusDisplay: Record<string, { label: string; style: string }> = {
-  pending:   { label: 'Pending',    style: 'background: rgba(59,130,246,0.12); color: #3B82F6' },
-  confirmed: { label: 'Confirmed',  style: 'background: rgba(59,130,246,0.12); color: #3B82F6' },
-  preparing: { label: 'Preparing',  style: 'background: rgba(255,107,53,0.12); color: #FF6B35' },
-  ready:     { label: 'Ready',      style: 'background: rgba(255,107,53,0.12); color: #FF6B35' },
-  picked_up: { label: 'On the way', style: 'background: rgba(255,107,53,0.12); color: #FF6B35' },
-  delivered: { label: 'Delivered',  style: 'background: rgba(27,67,50,0.12); color: #1B4332' },
-  cancelled: { label: 'Cancelled',  style: 'background: rgba(239,68,68,0.12); color: #EF4444' },
+interface StatusConfig {
+  label: string
+  style: React.CSSProperties
+  pulsing: boolean
+  icon: string
+}
+
+const statusConfig: Record<string, StatusConfig> = {
+  pending:   {
+    label: 'Waiting for restaurant...',
+    style: { background: 'rgba(59,130,246,0.12)', color: '#3B82F6' },
+    pulsing: true,
+    icon: '🕐',
+  },
+  confirmed: {
+    label: 'Restaurant confirmed!',
+    style: { background: 'rgba(34,197,94,0.12)', color: '#22C55E' },
+    pulsing: false,
+    icon: '✓',
+  },
+  preparing: {
+    label: 'Being prepared...',
+    style: { background: 'rgba(255,107,53,0.12)', color: '#FF6B35' },
+    pulsing: true,
+    icon: '👨‍🍳',
+  },
+  ready:     {
+    label: 'Ready for pickup',
+    style: { background: 'rgba(34,197,94,0.12)', color: '#22C55E' },
+    pulsing: false,
+    icon: '✓',
+  },
+  picked_up: {
+    label: 'Courier on the way!',
+    style: { background: 'rgba(255,107,53,0.12)', color: '#FF6B35' },
+    pulsing: true,
+    icon: '🛵',
+  },
+  delivered: {
+    label: 'Delivered',
+    style: { background: 'rgba(27,67,50,0.12)', color: '#1B4332' },
+    pulsing: false,
+    icon: '✓',
+  },
+  cancelled: {
+    label: 'Cancelled',
+    style: { background: 'rgba(239,68,68,0.12)', color: '#EF4444' },
+    pulsing: false,
+    icon: '✕',
+  },
+}
+
+function PulsingDot({ color }: { color: string }) {
+  return (
+    <span className="relative inline-flex h-2 w-2 mr-1.5">
+      <span
+        className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
+        style={{ background: color }}
+      />
+      <span
+        className="relative inline-flex rounded-full h-2 w-2"
+        style={{ background: color }}
+      />
+    </span>
+  )
 }
 
 export default function OrdersPage({ onTrack }: Props) {
   const [orders, setOrders] = useState<StoredOrder[]>([])
+  const [updating, setUpdating] = useState(false)
+  const updateFlashTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isFirstLoad = useRef(true)
+
+  const fetchOrders = useCallback(async () => {
+    const fresh = await orderStore.getAll()
+    setOrders(fresh)
+
+    if (!isFirstLoad.current) {
+      setUpdating(true)
+      if (updateFlashTimer.current) clearTimeout(updateFlashTimer.current)
+      updateFlashTimer.current = setTimeout(() => setUpdating(false), 800)
+    }
+    isFirstLoad.current = false
+  }, [])
 
   useEffect(() => {
-    orderStore.getAll().then(setOrders)
-  }, [])
+    fetchOrders()
+    const interval = setInterval(fetchOrders, 5000)
+    return () => {
+      clearInterval(interval)
+      if (updateFlashTimer.current) clearTimeout(updateFlashTimer.current)
+    }
+  }, [fetchOrders])
 
   const activeOrders = orders.filter(o => !['delivered', 'cancelled'].includes(o.status))
   const pastOrders = orders.filter(o => ['delivered', 'cancelled'].includes(o.status))
 
   return (
     <div className="pb-24 pt-5 px-4 bg-theme min-h-screen">
-      <h1 className="text-[22px] font-extrabold text-theme-primary mb-1 tracking-tight">Orders</h1>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="text-[22px] font-extrabold text-theme-primary tracking-tight">Orders</h1>
+        {activeOrders.length > 0 && (
+          <span
+            className="text-[11px] font-medium text-theme-muted transition-opacity duration-300"
+            style={{ opacity: updating ? 1 : 0 }}
+          >
+            Updating...
+          </span>
+        )}
+      </div>
       <p className="text-theme-muted text-sm mb-5">Your delivery history.</p>
 
       {orders.length === 0 && (
@@ -55,15 +142,28 @@ export default function OrdersPage({ onTrack }: Props) {
 
       {/* Active Orders */}
       {activeOrders.map(order => {
-        const sd = statusDisplay[order.status] || statusDisplay.pending
+        const cfg = statusConfig[order.status] ?? statusConfig.pending
+        const hasCourierLocation =
+          order.status === 'picked_up' &&
+          order.courierLat != null &&
+          order.courierLng != null
+
         return (
           <div key={order.id} className="card p-4 mb-4" style={{ borderLeft: '4px solid #FF6B35' }}>
-            <div className="flex items-center justify-between mb-1.5">
+            <div className="flex items-center justify-between mb-2">
               <span className="font-bold text-theme-primary">{order.businessName}</span>
-              <span className="text-[11px] font-bold px-3 py-1 rounded-full" style={{ ...Object.fromEntries(sd.style.split('; ').map(s => s.split(': '))) }}>
-                {sd.label}
+              <span
+                className="text-[11px] font-bold px-3 py-1 rounded-full flex items-center"
+                style={cfg.style}
+              >
+                {cfg.pulsing && <PulsingDot color={(cfg.style as React.CSSProperties & { color: string }).color} />}
+                {!cfg.pulsing && cfg.icon === '✓' && (
+                  <span className="mr-1 inline-flex"><CheckIcon /></span>
+                )}
+                {cfg.label}
               </span>
             </div>
+
             <p className="text-sm text-theme-muted mb-1">
               {order.items.map(i => `${i.name} × ${i.qty}`).join(', ')}
             </p>
@@ -71,6 +171,30 @@ export default function OrdersPage({ onTrack }: Props) {
             <p className="text-xs text-theme-muted mb-3">
               {order.deliveryLocation} · {order.channel === 'whatsapp' ? 'WhatsApp' : 'App'}
             </p>
+
+            {/* Courier info when picked_up */}
+            {order.status === 'picked_up' && order.courierName && (
+              <div
+                className="flex items-center justify-between rounded-xl px-3 py-2 mb-3"
+                style={{ background: 'rgba(255,107,53,0.08)', border: '1px solid rgba(255,107,53,0.2)' }}
+              >
+                <span className="text-sm font-semibold text-theme-primary">
+                  🛵 {order.courierName} is on the way!
+                </span>
+                {hasCourierLocation && (
+                  <a
+                    href={`https://maps.google.com/?q=${order.courierLat},${order.courierLng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[12px] font-bold px-3 py-1.5 rounded-lg text-white"
+                    style={{ background: '#FF6B35' }}
+                  >
+                    Track on Map
+                  </a>
+                )}
+              </div>
+            )}
+
             {['preparing', 'ready', 'picked_up'].includes(order.status) && (
               <button
                 onClick={onTrack}
@@ -95,7 +219,8 @@ export default function OrdersPage({ onTrack }: Props) {
                   background: order.status === 'cancelled' ? 'rgba(239,68,68,0.12)' : 'rgba(27,67,50,0.12)',
                   color: order.status === 'cancelled' ? '#EF4444' : '#1B4332',
                 }}>
-                  {order.status === 'delivered' && <CheckIcon />} {order.status === 'delivered' ? 'Delivered' : 'Cancelled'}
+                  {order.status === 'delivered' && <CheckIcon />}
+                  {order.status === 'delivered' ? 'Delivered' : 'Cancelled'}
                 </span>
               </div>
               <p className="text-sm text-theme-muted mb-2">

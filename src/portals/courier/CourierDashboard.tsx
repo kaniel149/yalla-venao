@@ -1,21 +1,57 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { orderStore } from '../../lib/orderStore'
+import type { StoredOrder } from '../../lib/orderStore'
 
-const availableOrders = [
-  { id: 'o1', from: 'La Quincha', to: 'Surf Camp Bungalow 4', pay: 8.50, distance: '1.2 km', eta: '8 min', customerPhone: '50766112233' },
-  { id: 'o2', from: 'Wao Beach Bar', to: 'El Sitio Hotel Room 12', pay: 5.00, distance: '0.6 km', eta: '5 min', customerPhone: '50766223344' },
-  { id: 'o3', from: 'Pizza Gavilan', to: 'Hostel La Vida', pay: 7.00, distance: '0.9 km', eta: '7 min', customerPhone: '50766334455' },
-]
+function getCourierName(): string {
+  try {
+    const raw = localStorage.getItem('yv_courier_setup')
+    if (!raw) return 'Courier'
+    return JSON.parse(raw).name || 'Courier'
+  } catch { return 'Courier' }
+}
 
 export default function CourierDashboard() {
   const [isOnline, setIsOnline] = useState(false)
+  const [readyOrders, setReadyOrders] = useState<StoredOrder[]>([])
+  const [deliveredOrders, setDeliveredOrders] = useState<StoredOrder[]>([])
   const [dismissedOrders, setDismissedOrders] = useState<string[]>([])
   const navigate = useNavigate()
 
-  const visibleOrders = availableOrders.filter(o => !dismissedOrders.includes(o.id))
+  const courierName = getCourierName()
 
-  function acceptOrder(_id: string) {
-    navigate('/courier/delivery')
+  // Load delivered orders once on mount
+  useEffect(() => {
+    orderStore.getByCourier(courierName).then(orders => {
+      setDeliveredOrders(orders.filter(o => o.status === 'delivered'))
+    })
+  }, [courierName])
+
+  // Poll for ready orders every 5s when online
+  useEffect(() => {
+    if (!isOnline) {
+      setReadyOrders([])
+      return
+    }
+
+    function fetchReady() {
+      orderStore.getReady().then(orders => setReadyOrders(orders))
+    }
+
+    fetchReady()
+    const interval = setInterval(fetchReady, 5000)
+    return () => clearInterval(interval)
+  }, [isOnline])
+
+  const visibleOrders = readyOrders.filter(o => !dismissedOrders.includes(o.id))
+
+  const deliveryFeeTotal = deliveredOrders.length * 5
+  const tipsTotal = deliveredOrders.reduce((sum, o) => sum + (o.tip || 0), 0)
+  const totalEarned = deliveryFeeTotal + tipsTotal
+
+  async function acceptOrder(orderId: string) {
+    await orderStore.assignCourier(orderId, courierName)
+    navigate(`/courier/delivery?id=${orderId}`)
   }
 
   function dismissOrder(id: string) {
@@ -28,7 +64,7 @@ export default function CourierDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="serif text-2xl text-gray-900">Hey, Miguel</h1>
+          <h1 className="serif text-2xl text-gray-900">Hey, {courierName}</h1>
           <p className="text-xs text-gray-400 font-medium mt-0.5">Playa Venao · Thursday</p>
         </div>
         <div className="w-10 h-10 rounded-full bg-[#1B4332]/10 flex items-center justify-center">
@@ -56,11 +92,11 @@ export default function CourierDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-2">
         <div className="bg-white rounded-2xl p-4">
-          <p className="text-2xl font-bold text-gray-900">7</p>
+          <p className="text-2xl font-bold text-gray-900">{deliveredOrders.length}</p>
           <p className="text-[11px] text-gray-400 mt-0.5 font-medium">Deliveries</p>
         </div>
         <div className="bg-white rounded-2xl p-4">
-          <p className="text-2xl font-bold text-gray-900">$50</p>
+          <p className="text-2xl font-bold text-gray-900">${totalEarned.toFixed(0)}</p>
           <p className="text-[11px] text-gray-400 mt-0.5 font-medium">Earned</p>
         </div>
         <div className="bg-white rounded-2xl p-4">
@@ -77,19 +113,19 @@ export default function CourierDashboard() {
             <div key={order.id} className="bg-white rounded-2xl p-4 mb-3 shadow-sm border border-gray-100">
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <p className="font-bold text-gray-900">{order.from}</p>
-                  <p className="text-xs text-gray-500">→ {order.to}</p>
+                  <p className="font-bold text-gray-900">{order.businessName}</p>
+                  <p className="text-xs text-gray-500">→ {order.deliveryLocation}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-[#1B4332]">${order.pay.toFixed(2)}</p>
-                  <p className="text-xs text-gray-400">{order.distance}</p>
+                  <p className="font-bold text-[#1B4332]">${order.deliveryFee.toFixed(2)}</p>
+                  <p className="text-xs text-gray-400">{order.items.length} item{order.items.length !== 1 ? 's' : ''}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-[11px] text-gray-400 mb-3">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                 </svg>
-                <span>~{order.eta}</span>
+                <span>Order for {order.customerName}</span>
               </div>
               <div className="flex gap-2">
                 <button
@@ -137,16 +173,16 @@ export default function CourierDashboard() {
         <h3 className="font-bold text-gray-900 mb-3">Today's earnings</h3>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-500">7 deliveries × avg $6</span>
-            <span className="font-medium text-gray-900">$42.00</span>
+            <span className="text-gray-500">{deliveredOrders.length} {deliveredOrders.length === 1 ? 'delivery' : 'deliveries'} × $5</span>
+            <span className="font-medium text-gray-900">${deliveryFeeTotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Tips received</span>
-            <span className="font-medium text-[#1B4332]">$8.00</span>
+            <span className="font-medium text-[#1B4332]">${tipsTotal.toFixed(2)}</span>
           </div>
           <div className="border-t pt-2 flex justify-between font-bold">
             <span>Total</span>
-            <span>$50.00</span>
+            <span>${totalEarned.toFixed(2)}</span>
           </div>
         </div>
         <p className="text-xs text-gray-400 mt-2">Payout every Sunday via YAPPY / cash pickup</p>

@@ -90,7 +90,7 @@ export const orderStore = {
     return (data as DbRow[]).map(rowToOrder)
   },
 
-  async add(order: Omit<StoredOrder, 'id' | 'createdAt' | 'status'>): Promise<StoredOrder> {
+  async add(order: Omit<StoredOrder, 'id' | 'createdAt' | 'status' | 'courierName' | 'courierLat' | 'courierLng'>): Promise<StoredOrder> {
     if (!isSupabaseConfigured || !supabase) {
       const newOrder: StoredOrder = {
         ...order,
