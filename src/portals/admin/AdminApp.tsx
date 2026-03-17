@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import AdminDashboard from './AdminDashboard'
 import AdminBusinesses from './AdminBusinesses'
 import AdminCouriers from './AdminCouriers'
+import { orderStore } from '../../lib/orderStore'
+import type { StoredOrder } from '../../lib/orderStore'
 
 const navItems = [
   { label: 'Dashboard', path: '/admin' },
@@ -90,46 +93,79 @@ export default function AdminApp() {
 }
 
 function AdminOrdersPage() {
-  const orders = [
-    { id: 'ord-067', customer: 'Alex B.', business: 'La Quincha', amount: '$27', status: 'delivered' },
-    { id: 'ord-066', customer: 'Maria S.', business: 'Surf Shack Bar', amount: '$14', status: 'active' },
-    { id: 'ord-065', customer: 'Jake T.', business: 'Minisuper Venao', amount: '$36', status: 'pending' },
-    { id: 'ord-064', customer: 'Chloe R.', business: 'Venao Wellness', amount: '$45', status: 'delivered' },
-  ]
+  const [orders, setOrders] = useState<StoredOrder[]>([])
+
+  useEffect(() => {
+    setOrders(orderStore.getAll())
+  }, [])
+
+  const updateStatus = (id: string, status: StoredOrder['status']) => {
+    orderStore.updateStatus(id, status)
+    setOrders(orderStore.getAll())
+  }
 
   const statusColor: Record<string, string> = {
     delivered: 'bg-green-100 text-green-700',
-    active: 'bg-orange-100 text-orange-600',
     pending: 'bg-blue-100 text-blue-600',
+    confirmed: 'bg-blue-100 text-blue-600',
+    preparing: 'bg-orange-100 text-orange-600',
+    ready: 'bg-green-100 text-green-700',
+    picked_up: 'bg-purple-100 text-purple-600',
+    cancelled: 'bg-red-100 text-red-600',
   }
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-900 mb-6">All Orders</h2>
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-gray-100">
-            <tr>
-              {['Order', 'Customer', 'Business', 'Amount', 'Status'].map(h => (
-                <th key={h} className="text-left px-4 py-3 font-semibold text-gray-400 text-xs uppercase tracking-wider">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {orders.map(o => (
-              <tr key={o.id} className="hover:bg-gray-50 transition-all">
-                <td className="px-4 py-3 font-mono text-xs text-gray-400">{o.id}</td>
-                <td className="px-4 py-3 font-semibold text-gray-900">{o.customer}</td>
-                <td className="px-4 py-3 text-gray-500">{o.business}</td>
-                <td className="px-4 py-3 font-bold text-[#FF6B35]">{o.amount}</td>
-                <td className="px-4 py-3">
-                  <span className={`px-2 py-1 rounded-full text-xs font-bold capitalize ${statusColor[o.status]}`}>{o.status}</span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-gray-900">All Orders</h2>
+        <span className="text-sm text-gray-400">{orders.length} total</span>
       </div>
+      {orders.length === 0 ? (
+        <div className="bg-white rounded-2xl shadow-sm p-12 text-center text-gray-400 text-sm">No orders yet</div>
+      ) : (
+        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  {['Order', 'Customer', 'Business', 'Amount', 'Channel', 'Status', 'Action'].map(h => (
+                    <th key={h} className="text-left px-4 py-3 font-semibold text-gray-400 text-xs uppercase tracking-wider whitespace-nowrap">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {orders.map(o => (
+                  <tr key={o.id} className="hover:bg-gray-50 transition-all">
+                    <td className="px-4 py-3 font-mono text-xs text-gray-400">{o.id}</td>
+                    <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{o.customerName}</td>
+                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{o.businessName}</td>
+                    <td className="px-4 py-3 font-bold text-[#FF6B35]">${o.total}</td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${o.channel === 'whatsapp' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                        {o.channel === 'whatsapp' ? 'WA' : 'App'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold capitalize ${statusColor[o.status] || 'bg-gray-100 text-gray-600'}`}>{o.status}</span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {o.status === 'pending' && (
+                        <button onClick={() => updateStatus(o.id, 'preparing')} className="text-xs font-bold text-[#1B4332] hover:underline">Accept</button>
+                      )}
+                      {o.status === 'preparing' && (
+                        <button onClick={() => updateStatus(o.id, 'ready')} className="text-xs font-bold text-[#FF6B35] hover:underline">Ready</button>
+                      )}
+                      {o.status === 'ready' && (
+                        <button onClick={() => updateStatus(o.id, 'delivered')} className="text-xs font-bold text-green-700 hover:underline">Delivered</button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
