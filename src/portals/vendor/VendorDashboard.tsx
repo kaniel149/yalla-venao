@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react'
 import { orderStore } from '../../lib/orderStore'
 import type { StoredOrder } from '../../lib/orderStore'
 
-type OrderStatus = 'pending' | 'preparing' | 'ready'
-
 const statusConfig = {
   pending:   { label: 'New',       color: 'bg-blue-500',  dot: 'bg-blue-400' },
   preparing: { label: 'Preparing', color: 'bg-[#FF6B35]', dot: 'bg-orange-400' },
