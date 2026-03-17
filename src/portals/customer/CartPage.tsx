@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import type { CartItem } from '../../data/dataAdapter'
 import { businesses } from '../../data/dataAdapter'
+import { orderStore } from '../../lib/orderStore'
 
 interface Props {
   cart: CartItem[]
@@ -69,7 +70,7 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
   const biz = businesses.find(b => b.id === businessId)
 
   const subtotal = cart.reduce((s, c) => s + c.product.price * c.qty, 0)
-  const deliveryFee = biz?.deliveryFee ?? 3
+  const deliveryFee = 5
   const total = subtotal + deliveryFee + tip
 
   const deliveryReady =
@@ -82,7 +83,19 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
       : BEACH_LOCATIONS.find(l => l.id === selectedLocation)?.label ?? ''
 
   const handlePlaceOrder = () => {
-    if (cart.length === 0 || !deliveryReady) return
+    if (cart.length === 0 || !deliveryReady || !biz) return
+    orderStore.add({
+      businessId: biz.id,
+      businessName: biz.name,
+      customerName: 'Walk-in',
+      items: cart.map(c => ({ name: c.product.name, qty: c.qty, price: c.product.price })),
+      subtotal,
+      deliveryFee,
+      tip,
+      total,
+      deliveryLocation: currentLocation,
+      channel: 'app',
+    })
     setPlaced(true)
     fireConfetti()
     setTimeout(() => {
@@ -99,6 +112,18 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
       currentLocation,
       total
     )
+    orderStore.add({
+      businessId: biz.id,
+      businessName: biz.name,
+      customerName: 'WhatsApp',
+      items: cart.map(c => ({ name: c.product.name, qty: c.qty, price: c.product.price })),
+      subtotal,
+      deliveryFee,
+      tip,
+      total,
+      deliveryLocation: currentLocation,
+      channel: 'whatsapp',
+    })
     setPlaced(true)
     window.open(link, '_blank')
     fireConfetti()
