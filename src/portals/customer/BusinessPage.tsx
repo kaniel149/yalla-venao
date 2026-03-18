@@ -476,7 +476,7 @@ export default function BusinessPage({ cart, addToCart, onViewCart }: Props) {
 
       {/* ── Floating Cart Bar (food only) ────────────────────────────────── */}
       {!isExperience && !isStay && cartCount > 0 && (
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-4 bg-transparent z-40">
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-md px-4 bg-transparent z-40">
           <button
             onClick={onViewCart}
             className="w-full bg-[#FF6B35] text-white font-bold py-4 rounded-2xl flex items-center justify-between px-5 shadow-xl hover:bg-[#E85520] active:scale-95 transition-all"
