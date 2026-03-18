@@ -29,10 +29,14 @@ function PortalSwitcher() {
       {/* Floating button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed top-3 right-3 z-[9999] w-10 h-10 rounded-full shadow-lg flex items-center justify-center text-sm transition-all active:scale-90"
+        className="fixed z-[9999] w-12 h-12 rounded-full shadow-2xl flex items-center justify-center text-lg transition-all active:scale-90"
         style={{
-          background: open ? '#FF6B35' : 'rgba(27,67,50,0.9)',
+          top: 'env(safe-area-inset-top, 12px)',
+          right: '12px',
+          marginTop: '12px',
+          background: open ? '#FF6B35' : 'rgba(27,67,50,0.95)',
           backdropFilter: 'blur(8px)',
+          border: '2px solid rgba(255,255,255,0.3)',
         }}
       >
         {open ? '✕' : '⚡'}
@@ -41,8 +45,8 @@ function PortalSwitcher() {
       {/* Panel */}
       {open && (
         <div
-          className="fixed top-14 right-3 z-[9999] rounded-2xl shadow-2xl p-2 w-44"
-          style={{ background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)', border: '1px solid rgba(0,0,0,0.08)' }}
+          className="fixed right-3 z-[9999] rounded-2xl shadow-2xl p-2 w-48"
+          style={{ top: 'calc(env(safe-area-inset-top, 12px) + 60px)', background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)', border: '1px solid rgba(0,0,0,0.08)' }}
         >
           <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest px-2 pt-1 pb-2">Switch Portal</p>
           {portals.map(p => {
