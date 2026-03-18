@@ -70,7 +70,7 @@ export default function CartPage({ cart, addToCart, removeFromCart, clearCart, o
   const biz = businesses.find(b => b.id === businessId)
 
   const subtotal = cart.reduce((s, c) => s + c.product.price * c.qty, 0)
-  const deliveryFee = 5
+  const deliveryFee = 2.5
   const total = subtotal + deliveryFee + tip
 
   const deliveryReady =

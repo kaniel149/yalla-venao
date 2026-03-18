@@ -45,7 +45,7 @@ export default function CourierDashboard() {
 
   const visibleOrders = readyOrders.filter(o => !dismissedOrders.includes(o.id))
 
-  const deliveryFeeTotal = deliveredOrders.length * 5
+  const deliveryFeeTotal = deliveredOrders.length * 2.5
   const tipsTotal = deliveredOrders.reduce((sum, o) => sum + (o.tip || 0), 0)
   const totalEarned = deliveryFeeTotal + tipsTotal
 
@@ -173,7 +173,7 @@ export default function CourierDashboard() {
         <h3 className="font-bold text-gray-900 mb-3">Today's earnings</h3>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-500">{deliveredOrders.length} {deliveredOrders.length === 1 ? 'delivery' : 'deliveries'} × $5</span>
+            <span className="text-gray-500">{deliveredOrders.length} {deliveredOrders.length === 1 ? 'delivery' : 'deliveries'} × $2.50</span>
             <span className="font-medium text-gray-900">${deliveryFeeTotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">

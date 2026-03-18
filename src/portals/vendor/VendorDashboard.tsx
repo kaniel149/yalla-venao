@@ -113,7 +113,7 @@ export default function VendorDashboard() {
                 {order.deliveryLocation} · {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
               <p className="text-[10px] text-gray-300 mb-3 font-medium">
-                Delivery fee: $5 · #{order.id}
+                Delivery fee: $2.50 · #{order.id}
               </p>
               <div className="flex gap-2">
                 {(['pending', 'preparing', 'ready'] as const).map(s => (

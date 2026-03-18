@@ -71,7 +71,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="text-right">
                   <p className="font-bold text-[#FF6B35]">${biz.revenue}</p>
-                  <p className="text-[10px] text-gray-400">${biz.count * 5} in delivery fees</p>
+                  <p className="text-[10px] text-gray-400">${(biz.count * 2.5).toFixed(2)} in delivery fees</p>
                 </div>
               </div>
             ))}

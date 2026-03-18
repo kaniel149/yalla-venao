@@ -242,7 +242,7 @@ export const orderStore = {
     return {
       totalOrders: all.length,
       totalRevenue: all.reduce((s, o) => s + o.total, 0),
-      totalDeliveryFees: all.length * 5,
+      totalDeliveryFees: all.length * 2.5,
       byBusiness: Object.entries(byBusiness)
         .map(([id, data]) => ({ businessId: id, ...data }))
         .sort((a, b) => b.count - a.count),
