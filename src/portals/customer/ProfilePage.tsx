@@ -55,6 +55,12 @@ const Icons = {
   ),
 }
 
+const portalLinks = [
+  { label: 'Vendor Portal', desc: 'Manage your restaurant', path: '/vendor', icon: Icons.orders },
+  { label: 'Courier Portal', desc: 'Deliver orders', path: '/courier', icon: Icons.location },
+  { label: 'Admin Dashboard', desc: 'Full platform control', path: '/admin', icon: Icons.payment },
+]
+
 const menuItems = [
   { icon: Icons.orders,   label: 'My Orders',        desc: '3 orders placed',           danger: false },
   { icon: Icons.location, label: 'Saved Addresses',  desc: 'Playa Venao, Surf Camp',    danger: false },
@@ -137,6 +143,26 @@ export default function ProfilePage() {
             </div>
             <span className="text-theme-muted">{Icons.chevron}</span>
           </button>
+        ))}
+      </div>
+
+      {/* ── Switch Portal ──────────────────────────────────────────── */}
+      <div className="card overflow-hidden mt-5">
+        <p className="px-4 pt-3 pb-1 text-[11px] font-bold text-theme-muted uppercase tracking-wider">Switch Portal</p>
+        {portalLinks.map((link) => (
+          <a
+            key={link.path}
+            href={link.path}
+            className="w-full flex items-center gap-3 px-4 py-3.5 transition-all text-left group"
+            style={{ borderTop: '1px solid var(--border)' }}
+          >
+            <span className="flex-shrink-0 text-[#FF6B35]">{link.icon}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-theme-primary">{link.label}</p>
+              <p className="text-xs text-theme-muted mt-0.5">{link.desc}</p>
+            </div>
+            <span className="text-theme-muted">{Icons.chevron}</span>
+          </a>
         ))}
       </div>
 
